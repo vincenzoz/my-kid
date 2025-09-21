@@ -1,0 +1,4 @@
+
+.card {
+  @apply flex items-center justify-center h-20 border rounded-xl text-center;
+}
