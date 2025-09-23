@@ -1,0 +1,9 @@
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@import "primeicons/primeicons.css";
+@plugin "tailwindcss-primeui";
+@tailwind utilities;
+
+.create-card {
+  @apply flex items-center justify-center h-30 border rounded-xl text-center text-surface-700 font-medium shadow-lg/20 active:opacity-90;
+}
