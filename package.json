@@ -1,0 +1,14 @@
+{
+  "name": "my-kid",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:backend": "npm run build -w backend",
+    "build:frontend": "npm run build -w frontend",
+    "build:all": "npm run build:backend && npm run build:frontend"
+  },
+  "workspaces": ["frontend", "backend"]
+}
