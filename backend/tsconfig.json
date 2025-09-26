@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@backend/*": ["./*"]
+    },
     "target": "ES2022",
     "module": "NodeNext",
-    "outDir": "dist",
+    "outDir": "./dist",
     "strict": true,
     "types": [],
     "sourceMap": true,
@@ -14,16 +18,14 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
+    "moduleResolution": "NodeNext",
     "skipLibCheck": true,
     "esModuleInterop": true
   },
   "include": [
-    "./"
+    "./src"
   ],
   "exclude": [
     "node_modules"
-  ],
-  "paths": {
-    "@backend/*": ["backend"]
-  }
+  ]
 }

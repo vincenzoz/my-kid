@@ -1,6 +1,6 @@
-// src/services/users.ts
+// @ts-ignore
+import {DbService} from "../common/database-utils.ts";
 
-// Define a User type
 export interface User {
     id: number;
     name: string;
@@ -19,8 +19,11 @@ const users: User[] = [
 /**
  * Get all users
  */
-export function getUsers(): User[] {
-    return users;
+export async function getUsers(): Promise<any> {
+    console.debug('Getting users');
+    let users: User[] = [];
+    const data = await DbService.getData("school_communications")
+    return data;
 }
 
 /**

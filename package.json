@@ -10,5 +10,11 @@
     "build:frontend": "npm run build -w frontend",
     "build:all": "npm run build:backend && npm run build:frontend"
   },
-  "workspaces": ["frontend", "backend"]
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "dependencies": {
+    "@supabase/supabase-js": "^2.58.0"
+  }
 }
