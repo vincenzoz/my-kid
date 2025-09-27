@@ -4,23 +4,19 @@ import {supabase} from "../backend/src/common/database-utils";
 
 export default async function handler(req, res) {
     console.log("get user api");
-
-
-    console.log("1");
-    const { data, error } = await supabase.from('school_communications').select('*');
-    console.log("3");
-    if(error) {
-        console.error(error);
-    } else {
-        console.log('OK');
-        console.log(data);
+    try {
+        const data = await getUsers();
+        return res.status(200).json({ users: data });
+    } catch (err) {
+        res.status(500).json({ error: error.message });
     }
-
-    console.log("...");
-    // getUsers()
-    //     .then(users => {
-    //         console.log('hey ' + users);
-    //     }).catch(err => {console.log('erroraa: ' + err)});
-    if (error) return res.status(500).json({ error: error.message })
-    return res.status(200).json({ users: data })
+    //
+    // const { data, error } = await supabase.from('school_communications').select('*');
+    // if(error) {
+    //     console.error(error);
+    // } else {
+    //     console.log(data);
+    // }
+    // if (error) return res.status(500).json({ error: error.message })
+    // return res.status(200).json({ users: data })
 }

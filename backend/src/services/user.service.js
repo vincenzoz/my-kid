@@ -2,18 +2,10 @@ import { supabase } from "../common/database-utils.js";
 
 
 export async function getUsers() {
-    console.debug('Getting users');
-
+    console.debug('getUser');
     const { data, error } = await supabase.from('school_communications').select('*');
-
-    if(error) {
-        console.error(error);
-    } else {
-        console.log('OK');
-        console.log(data);
-    }
-
-
+    if(error)
+        throw new Error(error.message);
     return data;
 }
 
