@@ -12,6 +12,7 @@ export class DbService {
         console.debug('tableName: ' + tableName);
         console.log('Runtime detection:', process.version);
 
+        console.log('before call');
         const {data, error, status} = await supabase.from('school_communications').select('*');
 
         if (error) {
