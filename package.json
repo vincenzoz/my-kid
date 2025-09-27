@@ -5,7 +5,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:backend": "npm run build -w backend",
     "build:frontend": "npm run build -w frontend",
     "build:all": "npm run build:backend && npm run build:frontend"
   },
