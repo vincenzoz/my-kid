@@ -1,19 +1,24 @@
 // api/users.js
 import { getUsers } from "../backend/src/services/user.service.js";
+import {supabase} from "../backend/src/common/database-utils";
 
-export default function handler(req, res) {
-    console.log(process.env.testA);
-
+export default async function handler(req, res) {
     console.log("get user api");
-    console.log(req.body);
-//     const users = [
-//         { id: 1, name: 'Alice' },
-//         { id: 2, name: 'Bob' }
-//     ];
 
-    getUsers()
-        .then(users => {
-            console.log('hey ' + users);
-        }).catch(err => {console.log('erroraa: ' + err)});
-    res.status(200).json([]);
+
+    const { data, error } = await supabase.from('school_communications').select('*');
+
+    if(error) {
+        console.error(error);
+    } else {
+        console.log('OK');
+        console.log(data);
+    }
+
+    // getUsers()
+    //     .then(users => {
+    //         console.log('hey ' + users);
+    //     }).catch(err => {console.log('erroraa: ' + err)});
+    if (error) return res.status(500).json({ error: error.message })
+    return res.status(200).json({ users: data })
 }
