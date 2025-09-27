@@ -1,5 +1,5 @@
 // api/users.js
-import { getUsers } from "backend/dist/services/user.service.js";
+import { getUsers } from "../backend/src/services/user.service.js";
 
 export default function handler(req, res) {
     console.log(process.env.testA);

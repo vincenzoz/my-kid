@@ -1,7 +1,6 @@
 {
   "name": "my-kid",
   "version": "1.0.0",
-  "type": "module",
   "private": true,
   "description": "",
   "main": "index.js",
