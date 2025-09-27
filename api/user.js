@@ -6,8 +6,9 @@ export default async function handler(req, res) {
     console.log("get user api");
 
 
+    console.log("1");
     const { data, error } = await supabase.from('school_communications').select('*');
-
+    console.log("3");
     if(error) {
         console.error(error);
     } else {
@@ -15,6 +16,7 @@ export default async function handler(req, res) {
         console.log(data);
     }
 
+    console.log("...");
     // getUsers()
     //     .then(users => {
     //         console.log('hey ' + users);
