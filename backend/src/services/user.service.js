@@ -1,13 +1,19 @@
-// @ts-ignore
-import {DbService} from "../common/database-utils.js";
+import { supabase } from "../common/database-utils.js";
 
 
-/**
- * Get all users
- */
 export async function getUsers() {
     console.debug('Getting users');
-    const data = await DbService.getData("school_communications")
+
+    const { data, error } = await supabase.from('school_communications').select('*');
+
+    if(error) {
+        console.error(error);
+    } else {
+        console.log('OK');
+        console.log(data);
+    }
+
+
     return data;
 }
 
