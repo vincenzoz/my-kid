@@ -1,8 +1,8 @@
-import { supabase } from "../common/database-utils.js";
+import { supabase } from "../common/database-client.js";
 
 
-export async function getUsers() {
-    console.debug('getUser');
+export async function getSchoolCommunications() {
+    console.debug('getSchoolCommunications');
     const { data, error } = await supabase.from('school_communications').select('*');
     if(error)
         throw new Error(error.message);
