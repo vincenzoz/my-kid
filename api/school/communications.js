@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     if(req.method === "GET") {
         try {
             const data = await getSchoolCommunications();
-            return res.status(200).json({ users: data });
+            return res.status(200).json({ communications: data });
         } catch (err) {
             res.status(500).json({ error: error.message });
         }
@@ -16,7 +16,7 @@ export default async function handler(req, res) {
         try {
             const { title, description, date } = req.body;
             if (!title || !description) {
-                return res.status(400).json({ error: 'Missing name or email' })
+                return res.status(400).json({ error: 'Missing title or description' })
             }
 
             const newSchoolCommunication = await getSchoolCommunications(title, description);
