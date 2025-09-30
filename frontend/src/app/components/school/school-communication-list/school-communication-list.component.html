@@ -1,0 +1,92 @@
+<div class="flex flex-col gap-1 min-h-screen h-screen bg-surface-50">
+  <div class="flex flex-col bg-red-400 max-h-50 mb-10 border-b-3 border-b-red-800 rounded-b-xs">
+    <div class="flex p-4 pb-1 items-center min-h-15 text-red-800">
+      <i class="pi pi-chevron-left"></i>
+      <span class="ml-2 font-semibol" routerLink="..">Indietro</span>
+      <div class="ml-auto btn" routerLink="../communications/create">Nuova</div>
+    </div>
+    <div class="flex flex-col gap-1.5 items-center">
+      <div class="h-15 items-center justify-items-center text-red-800 mb-0.5">
+        <p class="text-2xl font-semibold">Scuola</p>
+        <p>Comunicazioni</p>
+      </div>
+      <div
+        class="flex flex-col justify-center items-center w-30 h-30 rounded-full bg-surface-100 outline-3 outline-red-800">
+        <img class="w-20 h-20 mb-5" src="/icons/school.svg"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-1 flex flex-col overflow-hidden relative">
+    <div class="flex items-center pr-5 text-sm text-surface-700 self-end" (click)="toggleDisplayFilter()">
+      <i class="pi pi-filter text-xs"></i>
+      <span class="ml-1">filtra</span>
+    </div>
+    <div class="flex flex-col h-screen -mt-1 p-1">
+      <div class="flex-1">
+        <p-virtualscroller [items]="filteredCommunications" [itemSize]="80">
+          <ng-template #item let-item let-options="options">
+            <div class="min-h-full text-lg text-surface-600">
+              <div class="flex flex-col justify-center mx-4 h-[80px] border-b-1 border-b-surface-200">
+                <!-- The height should match with itemSize property -->
+                <div class="flex justify-between h-[15px] items-center">
+                  <span>{{ item.title }}</span>
+                  <i (click)="menu.show($event)" aria-haspopup="true" class="pi pi-ellipsis-v"></i>
+                </div>
+                @if(item.date) {
+                  <div>
+                    <p-chip class="bg-yellow-200 text-[10px] p-2 py-1 text-surface-400" label="{{item.date | date: 'dd.MM.yyyy'}}"></p-chip>
+                  </div>
+                }
+              </div>
+            </div>
+          </ng-template>
+        </p-virtualscroller>
+      </div>
+      <div class="h-5"></div> <!-- placeholder for additional content -->
+    </div>
+    <div class="h-10"></div> <!-- placeholder for the footer bar height -->
+  </div>
+  <p-contextmenu #menu [model]="items"></p-contextmenu>
+</div>
+<div>
+
+</div>
+
+@if(displayFilter()) {
+  <div class="fixed inset-0 z-50 opacity-100">
+    <div (click)="toggleDisplayFilter()" class="absolute inset-0 bg-surface-800 opacity-50"></div>
+
+    <div class="absolute bottom-0 w-full bg-white p-2 pb-6 rounded-t-lg shadow-lg">
+      <div class="flex flex-col gap-5 p-3">
+        <div class="flex self-end gap-4">
+          <!--          <div class="btn" (click)="applyFilter()">Applica</div>-->
+          <div class="btn-outlined" (click)="toggleDisplayFilter()">Chiudi</div>
+        </div>
+        <div class="flex flex-col gap-5">
+          <input [(ngModel)]="communicationFilter.text" pInputText type="text"
+                 (ngModelChange)="applyFilter()" placeholder="testo comunicazione"/>
+          <div class=" flex gap-4 items-center text-surface-500">
+
+            <p-chip
+              *ngFor="let filterEventChip of eventSelectChips"
+              [label]="filterEventChip.label"
+              class="text-surface-500"
+              [class]="{'chip-active' : selectedEventChip === filterEventChip}"
+              (click)="selectEventChip(filterEventChip)"
+              label="con eventi"></p-chip>
+          </div>
+          @if(selectedEventChip.type === EventSelectChip.WITH_EVENT) {
+
+            <div class="flex gap-4">
+              <p-datepicker [(ngModel)]="communicationFilter.dateFrom" (ngModelChange)="applyFilter()"
+                            placeholder="eventi dal" inputId="on_label" showIcon iconDisplay="input" dateFormat="dd.mm.yy"></p-datepicker>
+              <p-datepicker [(ngModel)]="communicationFilter.dateTo" (ngModelChange)="applyFilter()"
+                            placeholder="eventi fino al" inputId="on_label" showIcon iconDisplay="input" dateFormat="dd.mm.yy"></p-datepicker>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+}

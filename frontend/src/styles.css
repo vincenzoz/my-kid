@@ -5,5 +5,17 @@
 @tailwind utilities;
 
 .create-card {
-  @apply flex items-center justify-center h-30 border rounded-xl text-center text-surface-700 font-medium shadow-lg/20 active:opacity-90;
+  @apply flex items-center justify-center h-30 outline-4 rounded-xl font-semibold text-lg text-center text-shadow-md shadow-lg/20 active:opacity-90;
+}
+
+.text {
+  @apply text-surface-600 font-medium text-lg
+}
+
+.btn {
+  @apply bg-green-400 text-green-700 rounded-lg p-2 shadow-md;
+}
+
+.btn-outlined {
+  @apply outline-1 text-surface-500 rounded-lg p-2 shadow-md;
 }

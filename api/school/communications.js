@@ -1,9 +1,8 @@
-import { getSchoolCommunications } from "../../backend/src/services/school.service.js";
+import {getSchoolCommunications, postSchoolCommunications} from "../../backend/src/services/school.service.js";
 
 export default async function handler(req, res) {
-    console.log("get school communication api");
-
     if(req.method === "GET") {
+        console.log("[API] GET - /school/communication");
         try {
             const data = await getSchoolCommunications();
             return res.status(200).json({ communications: data });
@@ -14,12 +13,15 @@ export default async function handler(req, res) {
 
     if(req.method === "POST") {
         try {
-            const { title, description, date } = req.body;
+            console.log("[API] POST - /school/communication");
+            const { title, description, event, eventTitle, eventDate } = req.body;
             if (!title || !description) {
                 return res.status(400).json({ error: 'Missing title or description' })
             }
 
-            const newSchoolCommunication = await getSchoolCommunications(title, description);
+            const newSchoolCommunication = await postSchoolCommunications({
+                title, description, event, eventTitle, eventDate
+            });
             return res.status(201).json({ schoolCommunication: newSchoolCommunication })
         } catch (err) {
             console.error(err)

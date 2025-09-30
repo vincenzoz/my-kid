@@ -7,7 +7,9 @@
   "main": "index.js",
   "scripts": {
     "build:frontend": "npm run build -w frontend",
-    "build:all": "npm run build:frontend"
+    "build:all": "npm run build:frontend",
+    "start:api-server": "node api-server/index.js",
+    "debug:api-server": "node --inspect api-server/index.js "
   },
   "workspaces": [
     "frontend",

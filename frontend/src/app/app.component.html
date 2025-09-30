@@ -4,15 +4,17 @@
 <!--  </div>-->
 <!--}-->
 
-<router-outlet></router-outlet>
+<div class="w-screen h-screen ">
+  <router-outlet></router-outlet>
+</div>
 
 
 <div
   class="flex w-full justify-between fixed bottom-0 border-t-1 border-t-surface-100 pl-3 pr-3 text-surface-400 bg-surface-50">
   <div class="flex items-center justify-around w-35">
     <div routerLink="" (click)="navigateTo(NavigationSection.HOME)">
-      <i class="pi pi-home"
-         [class]="currentNavigationSection() == NavigationSection.HOME ? 'text-[26px] text-pink-500 text-shadow-lg' : 'text-[24px] text-surface-400'"></i>
+    <i class="pi pi-home"
+    [class]="currentNavigationSection() == NavigationSection.HOME ? 'text-[26px] text-pink-500 text-shadow-lg' : 'text-[24px] text-surface-400'"></i>
     </div>
     <div routerLink="school" (click)="navigateTo(NavigationSection.SCHOOL)">
       <i class="pi pi-graduation-cap"
