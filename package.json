@@ -1,14 +1,25 @@
 {
   "name": "my-kid",
   "version": "1.0.0",
-  "type": "module",
   "private": true,
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "build:backend": "npm run build -w backend",
     "build:frontend": "npm run build -w frontend",
-    "build:all": "npm run build:backend && npm run build:frontend"
+    "build:all": "npm run build:frontend",
+    "start:api-server": "node api-server/index.js",
+    "debug:api-server": "node --inspect api-server/index.js "
   },
-  "workspaces": ["frontend", "backend"]
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "dependencies": {
+    "@supabase/supabase-js": "^2.58.0"
+  },
+  "devDependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
 }

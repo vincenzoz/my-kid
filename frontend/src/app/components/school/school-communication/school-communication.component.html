@@ -1,0 +1,28 @@
+<div class="flex flex-col p-4 pb-2">
+  <div class="flex  pb-1 items-center text-red-800">
+    <i class="pi pi-chevron-left"></i>
+    <span class="ml-2 font-semibol" routerLink="..">Indietro</span>
+    <div class="ml-auto btn" (click)="save()">Salva</div>
+  </div>
+  <p class="text-red-800 text-lg font-semibold">Nuova comunicazione scolastica</p>
+</div>
+<div class="border-[1px] border-red-800"></div>
+
+<div class="flex flex-col gap-5 p-4">
+
+  <input pInputText [(ngModel)]="title" type="text" placeholder="Titolo comunicazione"/>
+
+  <textarea pTextarea id="over_label" placeholder="descrizione" [(ngModel)]="description" rows="5" cols="30"
+            style="resize: none" class="h-full"></textarea>
+
+  <div class="flex items-center">
+    <p-checkbox inputId="onlyEvents" [binary]="true" [(ngModel)]="isEvent"/>
+    <label for="onlyEvents" class="ml-2 mt-1">Crea evento</label>
+  </div>
+  @if(isEvent) {
+    <input pInputText [(ngModel)]="eventTitle" type="text" placeholder="Titolo evento"/>
+
+    <p-datepicker [(ngModel)]="eventDate" placeholder="data evento" inputId="on_label" showIcon
+                  iconDisplay="input" dateFormat="dd.mm.yy"></p-datepicker>
+  }
+</div>
