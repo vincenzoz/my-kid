@@ -1,12 +1,13 @@
-import {Component, inject} from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import {InputText} from 'primeng/inputtext';
-import {FormsModule} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {DatePicker} from 'primeng/datepicker';
 import {Textarea} from 'primeng/textarea';
 import {Checkbox} from 'primeng/checkbox';
 import {CreateSchoolCommunication} from '../../../models/school-models';
-import {Router, RouterLink} from '@angular/router';
-import {SchoolService} from '../../../services/school.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Location, NgIf} from '@angular/common';
+import {SchoolStore} from '../../../store/school/school.store';
 
 @Component({
   selector: 'school-communication',
@@ -16,45 +17,79 @@ import {SchoolService} from '../../../services/school.service';
     DatePicker,
     Textarea,
     Checkbox,
-    RouterLink
+    ReactiveFormsModule,
+    NgIf
   ],
   templateUrl: './school-communication.component.html',
   styleUrl: './school-communication.component.css'
 })
-export class SchoolCommunicationComponent {
+export class SchoolCommunicationComponent implements OnInit {
 
-  title: string = '';
-  description: string = '';
-  eventDate: Date | undefined;
-  isEvent: boolean = false;
-  eventTitle: string = '';
+  communicationForm: FormGroup;
 
-  private schoolService: SchoolService = inject(SchoolService);
+  protected schoolStore = inject(SchoolStore);
+
+  protected mode: 'create' | 'edit' | 'view' = 'create';
+
+  private communicationId?: number;
+
+  constructor(private fg: FormBuilder, private route: ActivatedRoute, private location: Location) {
+    effect(() => {
+      this.mode = this.route.snapshot.data['mode'];
+      this.communicationId = Number(this.route.snapshot.paramMap.get('id'));
+
+      if (this.mode === 'create') {
+        this.schoolStore.initCurrentCommunication();
+      }
+      if (this.communicationId && (this.mode === 'edit' || this.mode === 'view')) {
+        this.schoolStore.loadCommunication(this.communicationId);
+      }
+
+      const { data, loading } = this.schoolStore.currentCommunication();
+      if(loading) {
+        this.communicationForm.disable();
+      } else if(data) {
+        this.communicationForm.patchValue(data);
+        this.communicationForm.enable();
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.communicationForm = this.fg.group({
+      title: new FormControl<string>('', Validators.required),
+      description: new FormControl<string>('', Validators.required),
+      eventDate: new FormControl<Date | null> (null),
+      isEvent: new FormControl<boolean>(false),
+      eventTitle: new FormControl<string>('')
+    });
+  }
+
+  goBack(){
+    this.location.back();
+  }
+
   private router: Router = inject(Router);
 
-  save() {
+  saveOrModify() {
+    const isEvent = this.communicationForm.get('isEvent')!.value;
     const createSchoolCommunication: CreateSchoolCommunication = {
-      title: this.title,
-      description: this.description,
-      event: this.isEvent
+      title: this.communicationForm.get('title')!.value,
+      description: this.communicationForm.get('description')!.value,
+      event: isEvent,
     }
-    if(this.isEvent) {
-      createSchoolCommunication.eventTitle = this.eventTitle;
-      if (this.eventDate) {
-        const year = this.eventDate.getFullYear();
-        const month = String(this.eventDate.getMonth() + 1).padStart(2, '0');
-        const day = String(this.eventDate.getDate()).padStart(2, '0');
+    if (isEvent) {
+      createSchoolCommunication.eventTitle = this.communicationForm.get('eventTitle')?.value;
+      const eventDate: Date = this.communicationForm.get('eventDate')?.value;
+      if (eventDate) {
+        const year = eventDate.getFullYear();
+        const month = String(eventDate.getMonth() + 1).padStart(2, '0');
+        const day = String(eventDate.getDate()).padStart(2, '0');
         createSchoolCommunication.eventDate = `${year}-${month}-${day}`;
       }
     }
 
-    console.table(createSchoolCommunication);
-    this.schoolService.createSchoolCommunication(createSchoolCommunication)
-      .subscribe(value => {
-        // TODO handle error
-        console.log('OK');
-        this.router.navigate(['/school/communications']);
-      });
-
+    this.schoolStore.newCommunication(createSchoolCommunication);
+    this.router.navigate(['/school/communications']);
   }
 }

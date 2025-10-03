@@ -23,7 +23,9 @@ export const routes: Routes = [
   },
 
   { path: 'school/communications', component: SchoolCommunicationListComponent},
-  { path: 'school/communications/create', component: SchoolCommunicationComponent},
+  { path: 'school/communications/create', component: SchoolCommunicationComponent, data: {mode: 'create'}},
+  { path: 'school/communications/:id/edit', component: SchoolCommunicationComponent, data: {mode: 'edit'}},
+  { path: 'school/communications/:id/view', component: SchoolCommunicationComponent, data: {mode: 'view'}},
   { path: 'health', component: HealthComponent},
   { path: 'profile', component: ProfileComponent},
   {

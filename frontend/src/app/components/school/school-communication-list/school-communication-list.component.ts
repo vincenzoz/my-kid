@@ -1,15 +1,16 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {Component, effect, inject, OnInit, signal, ViewChild} from '@angular/core';
 import {Chip} from 'primeng/chip';
 import {ContextMenu} from 'primeng/contextmenu';
 import {DatePicker} from 'primeng/datepicker';
-import {DatePipe, NgForOf} from '@angular/common';
+import {DatePipe, Location, NgForOf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
 import {RouterLink} from '@angular/router';
 import {Scroller} from 'primeng/scroller';
-import {SchoolService} from '../../../services/school.service';
 import {MenuItem} from 'primeng/api';
 import {Communication, CommunicationFilter, EventFilterChip, EventSelectChip} from '../../../models/school-models';
+import {SchoolStore} from '../../../store/school/school.store';
+import {Skeleton} from 'primeng/skeleton';
 
 @Component({
   selector: 'school-communication-list',
@@ -22,20 +23,21 @@ import {Communication, CommunicationFilter, EventFilterChip, EventSelectChip} fr
     InputText,
     RouterLink,
     Scroller,
-    NgForOf
+    NgForOf,
+    Skeleton
   ],
   templateUrl: './school-communication-list.component.html',
   styleUrl: './school-communication-list.component.css'
 })
 export class SchoolCommunicationListComponent implements OnInit {
 
-  private schoolService: SchoolService = inject(SchoolService);
+  protected schoolStore = inject(SchoolStore);
 
-  items: MenuItem[] | undefined;
+  contextMenuItems: MenuItem[] | undefined;
+
+  @ViewChild('menu') menu!: ContextMenu;
 
   displayFilter = signal<boolean>(false);
-
-  originalCommunications: Communication[] = [];
 
   filteredCommunications: Communication[] = [];
 
@@ -55,16 +57,35 @@ export class SchoolCommunicationListComponent implements OnInit {
     this.applyFilter();
   }
 
+  constructor(private location: Location) {
+    effect(() => {
+      this.filteredCommunications = this.schoolStore.schoolCommunications().data?.communications || [];
+    });
+    this.schoolStore.loadCommunications();
+  }
 
   ngOnInit(): void {
-    this.schoolService.schoolCommunications().subscribe(data => {
-      this.originalCommunications = data.communications;
-      this.filteredCommunications = this.originalCommunications;
-    });
-    this.items = [
-      {label: 'Modifica', icon: 'pi pi-file-edit'},
-      {label: 'Cancella', icon: 'pi pi-trash'}
+  }
+
+  goBack() {
+    if(this.canNavigate())
+      this.location.back();
+  }
+
+  openContextMenu($event: MouseEvent, id: number) {
+    this.contextMenuItems = [
+      {
+        label: 'Modifica',
+        icon: 'pi pi-file-edit',
+        routerLink: '/school/communications/' + id + '/edit',
+      },
+      {
+        label: 'Cancella',
+        icon: 'pi pi-trash',
+        routerLink: '/school/communications/' + id + '/delete',
+      }
     ];
+    this.menu.show($event);
   }
 
   toggleDisplayFilter() {
@@ -77,8 +98,7 @@ export class SchoolCommunicationListComponent implements OnInit {
     const dateTo = this.communicationFilter?.dateTo;
     const onlyEvents = this.communicationFilter?.onlyEvents;
 
-    let filtered = this.originalCommunications;
-
+    let filtered = this.schoolStore.schoolCommunications().data?.communications || [];
     filtered = text
       ? filtered.filter(communication =>
         communication.title?.toLowerCase().includes(text) ||
@@ -114,6 +134,11 @@ export class SchoolCommunicationListComponent implements OnInit {
     }
     const date = new Date(dateStr);
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  canNavigate() {
+    const isLoading = this.schoolStore.schoolCommunications().loading;
+    return !isLoading;
   }
 
   protected readonly EventSelectChip = EventSelectChip;

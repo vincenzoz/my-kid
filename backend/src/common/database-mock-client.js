@@ -72,6 +72,7 @@ export function createMockClient() {
                 console.log('[MOCK] INSERT school communications');
                 return {
                     data: {
+                        id: 100,
                         title: "new title",
                         description: 'new description',
                         event: true,
