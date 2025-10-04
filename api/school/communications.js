@@ -7,7 +7,7 @@ export default async function handler(req, res) {
             const data = await getSchoolCommunications();
             return res.status(200).json({ communications: data });
         } catch (err) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ error: err.message });
         }
     }
 
