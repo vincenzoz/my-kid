@@ -16,7 +16,10 @@ export async function postSchoolCommunications({title, description, date, event,
     console.debug('date: ' + date);
     const { data, error } = await supabase
         .from('school_communications')
-        .insert({ title: title, description: description, event: event, event_title: eventTitle, event_date: eventDate });
+        .insert({ title: title, description: description, event: event, event_title: eventTitle, event_date: eventDate })
+        .select();
+    console.log('after insert');
+    console.table(data);
 
     if (error) throw new Error(error.message)
     return data;
