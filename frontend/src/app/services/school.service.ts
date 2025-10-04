@@ -26,4 +26,9 @@ export class SchoolService {
     return this.http.post<Communication>(url, createSchoolCommunication)
   }
 
+  viewSchoolCommunication(id: number): Observable<Communication> {
+    console.log("viewCommunication");
+    const url = environment.BACKEND_URL + "api/school/communications/" + id;
+    return this.http.get<Communication>(url)
+  }
 }

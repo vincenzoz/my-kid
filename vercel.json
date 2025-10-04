@@ -4,11 +4,13 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     {
-      "source": "/((?!.*\\.).*)",
+      "source": "/((?!api/|.*\\.).*)",
       "destination": "/browser/index.html"
-    } ,
+    },
     {
-      "source": "/:file(.*\\..+)",
+      "source": "/((?!api/).+\\..+)",
       "destination": "/browser/:file"
-    }]
+    }
+
+  ]
 }

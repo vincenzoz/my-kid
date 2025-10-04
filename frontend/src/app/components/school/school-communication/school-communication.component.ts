@@ -34,17 +34,23 @@ export class SchoolCommunicationComponent implements OnInit {
   private communicationId?: number;
 
   constructor(private fg: FormBuilder, private route: ActivatedRoute, private location: Location) {
-    effect(() => {
-      this.mode = this.route.snapshot.data['mode'];
-      this.communicationId = Number(this.route.snapshot.paramMap.get('id'));
-
-      if (this.mode === 'create') {
-        this.schoolStore.initCurrentCommunication();
-      }
-      if (this.communicationId && (this.mode === 'edit' || this.mode === 'view')) {
+    this.mode = this.route.snapshot.data['mode'];
+    this.communicationId = Number(this.route.snapshot.paramMap.get('id'));
+    console.log("mode: " + this.mode);
+    console.log("communicationId: " + this.communicationId);
+    if (this.communicationId && (this.mode === 'edit' || this.mode === 'view')) {
+      // current communication non set
+      // current communication set but id on route different thn current id
+      if (!this.schoolStore.currentCommunication() || this.schoolStore.currentCommunication().data?.id !== this.communicationId) {
+        console.log("before calling load");
         this.schoolStore.loadCommunication(this.communicationId);
       }
+    }
+    if (this.mode === 'create') {
+      this.schoolStore.initCurrentCommunication();
+    }
 
+    effect(() => {
       const { data, loading } = this.schoolStore.currentCommunication();
       if(loading) {
         this.communicationForm.disable();

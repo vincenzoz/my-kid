@@ -66,11 +66,19 @@ export const SchoolStore = signalStore(
       })
     },
     loadCommunication(communicationId: number) {
-      // TODO implement the backend service and wrap to Request
-      const fakeCommunication: Communication = {id: 1, title: "Vacanze scolastiche", description: "This is only a mock, the backend service is not implemented yet."};
-      patchState(store, {
-        currentCommunication: {data: fakeCommunication, loading: false}
-      })
+      patchState(store, {currentCommunication: {...store.currentCommunication(), loading: true}});
+      appStore.showSpinner(true);
+      schoolService.viewSchoolCommunication(communicationId).subscribe(({
+        next: (data) => {
+          patchState(store, {currentCommunication: {data: data, loading: false, firstLoad: true}})
+        },
+        error: (error) => {
+          patchState(store, {currentCommunication: {data: undefined, error: error, loading: false}})
+        },
+        complete: () => {
+          appStore.showSpinner(false);
+        }
+      }));
     }
   }))
 );
