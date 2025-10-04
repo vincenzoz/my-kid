@@ -7,8 +7,9 @@ export default async function handlerGetById(req, res) {
     if(req.method === "GET") {
         console.log("[API] GET - /school/communication/[ID]");
         try {
+            console.log('before');
             const id = req.params.id;
-            console.table('id: ' + id);
+            console.log('after: ' + id);
             const data = await getSchoolCommunicationById(Number(id));
             return res.status(200).json(data);
         } catch (err) {
