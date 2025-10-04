@@ -1,13 +1,12 @@
-<!--@if(currentNavigationSection() !== NavigationSection.HOME) {-->
-<!--  <div routerLink="" (click)="navigateTo(NavigationSection.HOME)">-->
-<!--    <i class="pi pi-chevron-left text-[24px] text-surface-400"></i>-->
-<!--  </div>-->
-<!--}-->
-
 <div class="w-screen h-screen ">
   <router-outlet></router-outlet>
 </div>
 
+@if(appStore.loading()) {
+  <div class="fixed inset-0 bg-surface-800 opacity-50 flex items-center justify-center z-50">
+    <p-progress-spinner ariaLabel="loading" />
+  </div>
+}
 
 <div
   class="flex w-full justify-between fixed bottom-0 border-t-1 border-t-surface-100 pl-3 pr-3 text-surface-400 bg-surface-50">

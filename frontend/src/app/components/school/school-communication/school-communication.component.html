@@ -1,28 +1,40 @@
-<div class="flex flex-col p-4 pb-2">
-  <div class="flex  pb-1 items-center text-red-800">
+<div class="flex flex-col pb-2 bg-red-400">
+  <div class="flex p-4 pb-1 items-center min-h-15 text-red-800">
     <i class="pi pi-chevron-left"></i>
-    <span class="ml-2 font-semibol" routerLink="..">Indietro</span>
-    <div class="ml-auto btn" (click)="save()">Salva</div>
+    <span class="ml-2 font-semibol" (click)="goBack()">Indietro</span>
+    @if(mode === 'create' || mode === 'edit') {
+      <div *ngIf="communicationForm.valid" class="ml-auto btn" (click)="saveOrModify()">{{ mode === 'create' ? 'Salva' : 'Modifica' }}</div>
+    }
   </div>
-  <p class="text-red-800 text-lg font-semibold">Nuova comunicazione scolastica</p>
-</div>
-<div class="border-[1px] border-red-800"></div>
 
-<div class="flex flex-col gap-5 p-4">
-
-  <input pInputText [(ngModel)]="title" type="text" placeholder="Titolo comunicazione"/>
-
-  <textarea pTextarea id="over_label" placeholder="descrizione" [(ngModel)]="description" rows="5" cols="30"
-            style="resize: none" class="h-full"></textarea>
-
-  <div class="flex items-center">
-    <p-checkbox inputId="onlyEvents" [binary]="true" [(ngModel)]="isEvent"/>
-    <label for="onlyEvents" class="ml-2 mt-1">Crea evento</label>
-  </div>
-  @if(isEvent) {
-    <input pInputText [(ngModel)]="eventTitle" type="text" placeholder="Titolo evento"/>
-
-    <p-datepicker [(ngModel)]="eventDate" placeholder="data evento" inputId="on_label" showIcon
-                  iconDisplay="input" dateFormat="dd.mm.yy"></p-datepicker>
+  @if(mode === 'create' || mode === 'edit') {
+    <p class="text-red-800 pl-4 text-lg font-semibold">{{ mode === 'create' ? 'Nuova comunicazione' : 'Modifica comunicazione' }}</p>
+  } @else if (mode === 'view') {
+    <p *ngIf="mode === 'view'" class="text-red-800 pl-4 text-lg font-semibold">{{ schoolStore.currentCommunication().data?.title }}</p>
   }
 </div>
+
+<div class="border-[1px] border-red-800"></div>
+
+@if(this.mode === 'view') {
+  <div class="m-6 p-5 outline-1 text-surface-500 rounded-lg">{{schoolStore.currentCommunication().data?.description}}</div>
+
+} @else {
+  <div class="flex flex-col gap-5 p-4" [formGroup]="communicationForm">
+    <input pInputText formControlName="title" type="text" placeholder="Titolo comunicazione"/>
+
+    <textarea pTextarea id="over_label" placeholder="descrizione" formControlName="description" rows="5" cols="30"
+              style="resize: none" class="h-full"></textarea>
+
+    <div class="flex items-center">
+      <p-checkbox inputId="onlyEvents" [binary]="true" formControlName="isEvent"/>
+      <label for="onlyEvents" class="ml-2 mt-1">Crea evento</label>
+    </div>
+    @if(this.communicationForm.get('isEvent')?.value) {
+      <input pInputText formControlName="eventTitle" type="text" placeholder="Titolo evento"/>
+
+      <p-datepicker formControlName="eventDate" placeholder="data evento" inputId="on_label" showIcon
+                    iconDisplay="input" dateFormat="dd.mm.yy"></p-datepicker>
+    }
+  </div>
+}
