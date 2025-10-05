@@ -4,7 +4,7 @@ import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, V
 import {DatePicker} from 'primeng/datepicker';
 import {Textarea} from 'primeng/textarea';
 import {Checkbox} from 'primeng/checkbox';
-import {CreateSchoolCommunication} from '../../../models/school-models';
+import {CreateSchoolCommunication, ModifyCommunication} from '../../../models/school-models';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DatePipe, Location, NgIf} from '@angular/common';
 import {SchoolStore} from '../../../store/school/school.store';
@@ -81,24 +81,33 @@ export class SchoolCommunicationComponent implements OnInit {
   private router: Router = inject(Router);
 
   saveOrModify() {
-    const isEvent = this.communicationForm.get('isEvent')!.value;
-    const createSchoolCommunication: CreateSchoolCommunication = {
-      title: this.communicationForm.get('title')!.value,
-      description: this.communicationForm.get('description')!.value,
-      event: isEvent,
-    }
-    if (isEvent) {
-      createSchoolCommunication.eventTitle = this.communicationForm.get('eventTitle')?.value;
-      const eventDate: Date = this.communicationForm.get('eventDate')?.value;
-      if (eventDate) {
-        const year = eventDate.getFullYear();
-        const month = String(eventDate.getMonth() + 1).padStart(2, '0');
-        const day = String(eventDate.getDate()).padStart(2, '0');
-        createSchoolCommunication.eventDate = `${year}-${month}-${day}`;
+    if (this.mode === 'create') {
+      const isEvent = this.communicationForm.get('isEvent')!.value;
+      const createSchoolCommunication: CreateSchoolCommunication = {
+        title: this.communicationForm.get('title')!.value,
+        description: this.communicationForm.get('description')!.value,
+        event: isEvent,
       }
-    }
+      if (isEvent) {
+        createSchoolCommunication.eventTitle = this.communicationForm.get('eventTitle')?.value;
+        const eventDate: Date = this.communicationForm.get('eventDate')?.value;
+        if (eventDate) {
+          const year = eventDate.getFullYear();
+          const month = String(eventDate.getMonth() + 1).padStart(2, '0');
+          const day = String(eventDate.getDate()).padStart(2, '0');
+          createSchoolCommunication.eventDate = `${year}-${month}-${day}`;
+        }
+      }
+      this.schoolStore.newCommunication(createSchoolCommunication);
 
-    this.schoolStore.newCommunication(createSchoolCommunication);
+    } else if (this.mode === 'edit') {
+      const modifyCommunication: ModifyCommunication = {
+        title: this.communicationForm.get('title')!.value,
+        description: this.communicationForm.get('description')!.value,
+        important: this.communicationForm.get('important')?.value,
+      };
+      this.schoolStore.modifyCommunication(this.communicationId!, modifyCommunication);
+    }
     this.router.navigate(['/school/communications']);
   }
 }

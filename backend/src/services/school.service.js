@@ -31,3 +31,15 @@ export async function getSchoolCommunicationById(id) {
     if (error) throw new Error(error.message)
     return data;
 }
+
+export async function modifySchoolCommunicationById(id, { title, description, important }) {
+    console.log('id:' + id, " - title: " + title, " - description: " + description, " - important: " + important);
+    const { data, error } = await supabase
+        .from('school_communications')
+        .update({ title, description })
+        .eq('id', id)
+        .select()
+        .single();
+    if (error) throw new Error(error.message)
+    return data;
+}

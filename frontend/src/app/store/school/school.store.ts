@@ -1,4 +1,9 @@
-import {Communication, CommunicationsResponse, CreateSchoolCommunication} from '../../models/school-models';
+import {
+  Communication,
+  CommunicationsResponse,
+  CreateSchoolCommunication,
+  ModifyCommunication
+} from '../../models/school-models';
 import {patchState, signalStore, withMethods, withState} from '@ngrx/signals';
 import {inject} from '@angular/core';
 import {SchoolService} from '../../services/school.service';
@@ -52,6 +57,28 @@ export const SchoolStore = signalStore(
         next: (data) => {
           // const updatedCommunications = [...store.schoolCommunications().data?.communications || [], data];
           const updatedCommunications = [data, ...(store.schoolCommunications().data?.communications || [])];
+          console.table(updatedCommunications);
+          patchState(store, {
+            schoolCommunications: {data: {communications: updatedCommunications}, loading: false}
+          });
+        },
+        error: (error) => {
+          patchState(store, {
+            schoolCommunications: {data: undefined, loading: false, error: error}
+          })
+        },
+        complete: () => {
+          appStore.showSpinner(false);
+        }
+      })
+    },
+    modifyCommunication(id: number, modifyCommunication: ModifyCommunication) {
+      patchState(store, {schoolCommunications: {...store.schoolCommunications(), loading: true}});
+      appStore.showSpinner(true);
+      schoolService.modifyCommunication(id, modifyCommunication).subscribe({
+        next: (data) => {
+          const updatedCommunications = store.schoolCommunications().data?.communications.map(communication =>
+           communication.id === id ? {...communication, ...data} : communication) || [];
           console.table(updatedCommunications);
           patchState(store, {
             schoolCommunications: {data: {communications: updatedCommunications}, loading: false}

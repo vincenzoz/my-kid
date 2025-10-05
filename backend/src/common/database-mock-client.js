@@ -59,7 +59,27 @@ export function createMockClient() {
                             }
                         }
                     }
-                }
+                },update: (table) => {
+                    console.log('[MOCK] INSERT school communications');
+                    return {
+                        eq: () => {
+                            return {
+                                select: () => {
+                                    return {
+                                        data: {
+                                            id: 1,
+                                            createdAt: new Date().getTime(),
+                                            title: "modified title",
+                                            description: 'modified description',
+                                            important: true,
+                                            read: true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
             }
         }
     }

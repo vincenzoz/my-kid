@@ -11,6 +11,12 @@ export type CreateSchoolCommunication = {
   eventDate?: string,
 }
 
+export type ModifyCommunication = {
+  title: string,
+  description: string,
+  important?: boolean
+}
+
 export type Communication = {
   id: number;
   title: string;
