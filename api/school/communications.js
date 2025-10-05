@@ -5,9 +5,23 @@ export default async function handler(req, res) {
         console.log("[API] GET - /school/communication");
         try {
             const data = await getSchoolCommunications();
-            return res.status(200).json({ communications: data });
+            let mappedCommunications = [];
+            mappedCommunications = data.map(communication => {
+                let com;
+                com = {
+                    id: communication.id,
+                    title: communication.title,
+                    description: communication.description,
+                    createdAt: communication.created_at,
+                    createdBy: communication.created_by,
+                    important: communication.important,
+                    read: communication.read
+                }
+                return com;
+            })
+            return res.status(200).json({ communications: mappedCommunications });
         } catch (err) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ error: err.message });
         }
     }
 
@@ -22,7 +36,17 @@ export default async function handler(req, res) {
             const newSchoolCommunication = await postSchoolCommunications({
                 title, description, event, eventTitle, eventDate
             });
-            return res.status(201).json(newSchoolCommunication);
+
+            const mappedDto = {
+                id: newSchoolCommunication.id,
+                title: newSchoolCommunication.title,
+                description: newSchoolCommunication.description,
+                createdAt: newSchoolCommunication.created_at,
+                createdBy: newSchoolCommunication.created_by,
+                important: newSchoolCommunication.important,
+                read: newSchoolCommunication.read
+            }
+            return res.status(201).json(mappedDto);
         } catch (err) {
             console.error(err)
             return res.status(500).json({ error: 'Server error' })

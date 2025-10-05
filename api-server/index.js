@@ -1,7 +1,7 @@
 import express from 'express';
 import handler from "../api/school/communications.js";
-import handlerViewModifyDelete from "../api/school/communications/[id].js";
 import cors from 'cors';
+import handlerGetById from "../api/school/communications/[id].js";
 
 
 const app = express();
@@ -19,7 +19,7 @@ app.all("/api/school/communications", async (req, res) => {
 
 app.all("/api/school/communications/:id", async (req, res) => {
     try {
-        await handlerViewModifyDelete(req, res);
+        await handlerGetById(req, res);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'Internal server error' })
