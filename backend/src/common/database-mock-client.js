@@ -66,13 +66,17 @@ export function createMockClient() {
                             return {
                                 select: () => {
                                     return {
-                                        data: {
-                                            id: 1,
-                                            createdAt: new Date().getTime(),
-                                            title: "modified title",
-                                            description: 'modified description',
-                                            important: true,
-                                            read: true
+                                        single: () => {
+                                            return {
+                                                data: {
+                                                    id: 1,
+                                                    createdAt: new Date().getTime(),
+                                                    title: "modified title",
+                                                    description: 'modified description',
+                                                    important: true,
+                                                    read: true
+                                                }
+                                            }
                                         }
                                     }
                                 }

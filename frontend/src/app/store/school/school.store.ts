@@ -77,6 +77,9 @@ export const SchoolStore = signalStore(
       appStore.showSpinner(true);
       schoolService.modifyCommunication(id, modifyCommunication).subscribe({
         next: (data) => {
+          patchState(store, {
+            currentCommunication: {data: data, loading: false}
+          });
           const updatedCommunications = store.schoolCommunications().data?.communications.map(communication =>
            communication.id === id ? {...communication, ...data} : communication) || [];
           console.table(updatedCommunications);
