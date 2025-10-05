@@ -15,7 +15,10 @@ export type Communication = {
   id: number;
   title: string;
   description: string;
-  date?: string
+  createdAt: Date;
+  createdBy: string;
+  important: boolean;
+  read: boolean;
 }
 
 export type CommunicationFilter = {

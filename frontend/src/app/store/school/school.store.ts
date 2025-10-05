@@ -50,7 +50,9 @@ export const SchoolStore = signalStore(
       appStore.showSpinner(true);
       schoolService.createSchoolCommunication(communication).subscribe({
         next: (data) => {
-          const updatedCommunications = [...store.schoolCommunications().data?.communications || [], data];
+          // const updatedCommunications = [...store.schoolCommunications().data?.communications || [], data];
+          const updatedCommunications = [data, ...(store.schoolCommunications().data?.communications || [])];
+          console.table(updatedCommunications);
           patchState(store, {
             schoolCommunications: {data: {communications: updatedCommunications}, loading: false}
           });
@@ -70,7 +72,7 @@ export const SchoolStore = signalStore(
       appStore.showSpinner(true);
       schoolService.viewSchoolCommunication(communicationId).subscribe(({
         next: (data) => {
-          patchState(store, {currentCommunication: {data: data, loading: false, firstLoad: true}})
+          patchState(store, {currentCommunication: {data: data, loading: false , firstLoad: true}})
         },
         error: (error) => {
           patchState(store, {currentCommunication: {data: undefined, error: error, loading: false}})

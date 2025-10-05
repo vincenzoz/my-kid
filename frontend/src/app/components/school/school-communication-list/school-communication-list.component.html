@@ -25,29 +25,33 @@
     <div class="flex flex-col h-screen -mt-1 p-1">
       <div class="flex-1">
 
-        @if(schoolStore.schoolCommunications().loading) {
+        @if (schoolStore.schoolCommunications().loading) {
           <div class="flex flex-col gap-4 p-4 h-screen ">
-            <p-skeleton height="50px" class="w-full" />
-            <p-skeleton height="50px" class="w-full" />
-            <p-skeleton height="50px" class="w-full" />
-            <p-skeleton height="50px" class="w-full" />
-            <p-skeleton height="50px" class="w-full" />
+            <p-skeleton height="50px" class="w-full"/>
+            <p-skeleton height="50px" class="w-full"/>
+            <p-skeleton height="50px" class="w-full"/>
+            <p-skeleton height="50px" class="w-full"/>
+            <p-skeleton height="50px" class="w-full"/>
           </div>
         } @else {
           <p-virtualscroller [items]="this.filteredCommunications" [itemSize]="80">-->
             <ng-template #item let-item let-options="options">
               <div class="min-h-full text-lg text-surface-600" [routerLink]="item.id + '/view'">
-                <div class="flex flex-col justify-center mx-4 h-[80px] border-b-1 border-b-surface-200">
+                <div class="flex flex-col gap-1 justify-center mx-4 h-[80px] border-b-1 border-b-surface-200">
                   <!-- The height should match with itemSize property -->
                   <div class="flex justify-between h-[15px] items-center">
-                    <span>{{ item.title }}</span>
+                    <span class="grow-1">{{ item.title }}</span>
+                    <div class="text-sm text-red-400 mr-3">Nuova</div>
                     <i (click)="openContextMenu($event, item.id)" aria-haspopup="true" class="pi pi-ellipsis-v"></i>
                   </div>
-                  @if(item.date) {
-                    <div>
-                      <p-chip class="bg-yellow-200 text-[10px] p-2 py-1 text-surface-400" label="{{item.date | date: 'dd.MM.yyyy'}}"></p-chip>
-                    </div>
-                  }
+                  <div class="flex gap-2">
+                      <p-chip class="bg-yellow-200 text-amber-500 text-[10px] p-2 py-1"
+                              label="{{item.createdAt | date: 'dd.MM.yyyy'}}"></p-chip>
+                      @if(item.important) {
+                        <p-chip class="bg-red-400 text-red-800 text-[10px] p-2 py-1"
+                                label="Importante"></p-chip>
+                      }
+                  </div>
                 </div>
               </div>
             </ng-template>
@@ -64,7 +68,7 @@
 
 </div>
 
-@if(displayFilter()) {
+@if (displayFilter()) {
   <div class="fixed inset-0 z-50 opacity-100">
     <div (click)="toggleDisplayFilter()" class="absolute inset-0 bg-surface-800 opacity-50"></div>
 
@@ -87,13 +91,15 @@
               (click)="selectEventChip(filterEventChip)"
               label="con eventi"></p-chip>
           </div>
-          @if(selectedEventChip.type === EventSelectChip.WITH_EVENT) {
+          @if (selectedEventChip.type === EventSelectChip.WITH_EVENT) {
 
             <div class="flex gap-4">
               <p-datepicker [(ngModel)]="communicationFilter.dateFrom" (ngModelChange)="applyFilter()"
-                            placeholder="eventi dal" inputId="on_label" showIcon iconDisplay="input" dateFormat="dd.mm.yy"></p-datepicker>
+                            placeholder="eventi dal" inputId="on_label" showIcon iconDisplay="input"
+                            dateFormat="dd.mm.yy"></p-datepicker>
               <p-datepicker [(ngModel)]="communicationFilter.dateTo" (ngModelChange)="applyFilter()"
-                            placeholder="eventi fino al" inputId="on_label" showIcon iconDisplay="input" dateFormat="dd.mm.yy"></p-datepicker>
+                            placeholder="eventi fino al" inputId="on_label" showIcon iconDisplay="input"
+                            dateFormat="dd.mm.yy"></p-datepicker>
             </div>
           }
         </div>
