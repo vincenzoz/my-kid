@@ -107,21 +107,21 @@ export class SchoolCommunicationListComponent implements OnInit {
     if(this.communicationFilter.selectedChip?.type !== EventSelectChip.ALL) {
       if(this.communicationFilter.selectedChip?.type === EventSelectChip.WITH_EVENT) {
         filtered = onlyEvents
-          ? filtered.filter(communication => communication.date)
+          ? filtered.filter(communication => communication.createdAt)
           : filtered;
         filtered = dateFrom
           ? filtered.filter(communication => {
-            return !communication.date || this.toDateOnly(communication.date) >= dateFrom
+            return !communication.createdAt || communication.createdAt >= dateFrom
           })
           : filtered;
         filtered = dateTo
           ? filtered.filter(communication => {
-            return !communication.date || this.toDateOnly(communication.date) <= dateTo;
+            return !communication.createdAt || communication.createdAt <= dateTo;
           })
           : filtered;
       }
       if(this.communicationFilter.selectedChip?.type === EventSelectChip.WITHOUT_EVENT) {
-        filtered = filtered.filter(communication => !communication.date)
+        filtered = filtered.filter(communication => !communication.createdAt)
       }
     }
     this.filteredCommunications = filtered;

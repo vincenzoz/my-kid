@@ -6,8 +6,9 @@ import {Textarea} from 'primeng/textarea';
 import {Checkbox} from 'primeng/checkbox';
 import {CreateSchoolCommunication} from '../../../models/school-models';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Location, NgIf} from '@angular/common';
+import {DatePipe, Location, NgIf} from '@angular/common';
 import {SchoolStore} from '../../../store/school/school.store';
+import {Skeleton} from 'primeng/skeleton';
 
 @Component({
   selector: 'school-communication',
@@ -18,7 +19,9 @@ import {SchoolStore} from '../../../store/school/school.store';
     Textarea,
     Checkbox,
     ReactiveFormsModule,
-    NgIf
+    NgIf,
+    DatePipe,
+    Skeleton
   ],
   templateUrl: './school-communication.component.html',
   styleUrl: './school-communication.component.css'

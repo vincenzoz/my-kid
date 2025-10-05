@@ -7,9 +7,13 @@ export default async function handlerGetById(req, res) {
     if(req.method === "GET") {
         console.log("[API] GET - /school/communication/[ID]");
         try {
-            console.log('before');
-            const id = req.query.id;
-            console.log('after: ' + id);
+            let id;
+            if (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'development') {
+                id = req.params.id;
+            } else {
+                id = req.query.id;
+            }
+            console.log('id: ' + id);
             if (!id || isNaN(Number(id))) {
                 return res.status(400).json({ error: "Invalid ID" });
             }
@@ -17,7 +21,18 @@ export default async function handlerGetById(req, res) {
             if (!data) {
                 return res.status(404).json({ error: "Data not found" });
             }
-            return res.status(200).json(data);
+
+            const mappedDto = {
+                id: data.id,
+                title: data.title,
+                description: data.description,
+                createdAt: data.created_at,
+                createdBy: data.created_by,
+                important: data.important,
+                read: data.read
+            }
+
+            return res.status(200).json(mappedDto);
         } catch (err) {
             return res.status(500).json({ error: err.message });
         }
