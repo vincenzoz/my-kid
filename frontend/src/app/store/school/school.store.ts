@@ -97,6 +97,29 @@ export const SchoolStore = signalStore(
         }
       })
     },
+    deleteCommunication(id: number) {
+      patchState(store, {schoolCommunications: {...store.schoolCommunications(), loading: true}});
+      appStore.showSpinner(true);
+      schoolService.deleteCommunication(id).subscribe({
+        next: (data) => {
+          console.log('after next')
+          const updatedCommunications = store.schoolCommunications().data?.communications.filter(communication =>
+           communication.id != data.id) || [];
+          console.table(updatedCommunications);
+          patchState(store, {
+            schoolCommunications: {data: {communications: updatedCommunications}, loading: false}
+          });
+        },
+        error: (error) => {
+          patchState(store, {
+            schoolCommunications: {data: undefined, loading: false, error: error}
+          })
+        },
+        complete: () => {
+          appStore.showSpinner(false);
+        }
+      })
+    },
     loadCommunication(communicationId: number) {
       patchState(store, {currentCommunication: {...store.currentCommunication(), loading: true}});
       appStore.showSpinner(true);

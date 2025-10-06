@@ -43,3 +43,15 @@ export async function modifySchoolCommunicationById(id, { title, description, im
     if (error) throw new Error(error.message)
     return data;
 }
+
+export async function deleteSchoolCommunicationById(id) {
+    console.log('id:' + id)
+    const { data, error } = await supabase
+        .from('school_communications')
+        .delete()
+        .eq('id', id)
+        .select()
+        .single();
+    if (error) throw new Error(error.message)
+    return data;
+}

@@ -43,4 +43,10 @@ export class SchoolService {
     const url = environment.BACKEND_URL + "api/school/communications/" + id;
     return this.http.get<Communication>(url)
   }
+
+  deleteCommunication(id: number): Observable<Communication> {
+    console.log("deleteCommunication");
+    const url = environment.BACKEND_URL + "api/school/communications/" + id;
+    return this.http.delete<Communication>(url)
+  }
 }

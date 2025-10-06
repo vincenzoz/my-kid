@@ -5,12 +5,13 @@ import {DatePicker} from 'primeng/datepicker';
 import {DatePipe, Location, NgForOf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {Scroller} from 'primeng/scroller';
-import {MenuItem} from 'primeng/api';
+import {ConfirmationService, MenuItem} from 'primeng/api';
 import {Communication, CommunicationFilter, EventFilterChip, EventSelectChip} from '../../../models/school-models';
 import {SchoolStore} from '../../../store/school/school.store';
 import {Skeleton} from 'primeng/skeleton';
+import {ConfirmDialog} from 'primeng/confirmdialog';
 
 @Component({
   selector: 'school-communication-list',
@@ -24,7 +25,8 @@ import {Skeleton} from 'primeng/skeleton';
     RouterLink,
     Scroller,
     NgForOf,
-    Skeleton
+    Skeleton,
+    ConfirmDialog
   ],
   templateUrl: './school-communication-list.component.html',
   styleUrl: './school-communication-list.component.css'
@@ -57,7 +59,7 @@ export class SchoolCommunicationListComponent implements OnInit {
     this.applyFilter();
   }
 
-  constructor(private location: Location) {
+  constructor(private router: Router, private confirmationService: ConfirmationService, private location: Location) {
     effect(() => {
       this.filteredCommunications = this.schoolStore.schoolCommunications().data?.communications || [];
     });
@@ -68,7 +70,7 @@ export class SchoolCommunicationListComponent implements OnInit {
   }
 
   goBack() {
-    if(this.canNavigate())
+    if (this.canNavigate())
       this.location.back();
   }
 
@@ -77,12 +79,12 @@ export class SchoolCommunicationListComponent implements OnInit {
       {
         label: 'Modifica',
         icon: 'pi pi-file-edit',
-        routerLink: '/school/communications/' + id + '/edit',
+        command: () => this.router.navigate(['/school/communications', id, 'edit']),
       },
       {
         label: 'Cancella',
         icon: 'pi pi-trash',
-        routerLink: '/school/communications/' + id + '/delete',
+        command: () => this.deleteCommunication(id)
       }
     ];
     this.menu.show($event);
@@ -90,6 +92,13 @@ export class SchoolCommunicationListComponent implements OnInit {
 
   toggleDisplayFilter() {
     this.displayFilter.set(!this.displayFilter());
+  }
+
+  deleteCommunication(id: number) {
+    this.confirmationService.confirm({
+      message: 'Sei sicuro di voler cancellare questa comunicazione?',
+      accept: () => this.schoolStore.deleteCommunication(id)
+    });
   }
 
   applyFilter() {
@@ -104,8 +113,8 @@ export class SchoolCommunicationListComponent implements OnInit {
         communication.title?.toLowerCase().includes(text) ||
         communication.description?.toLowerCase().includes(text))
       : filtered;
-    if(this.communicationFilter.selectedChip?.type !== EventSelectChip.ALL) {
-      if(this.communicationFilter.selectedChip?.type === EventSelectChip.WITH_EVENT) {
+    if (this.communicationFilter.selectedChip?.type !== EventSelectChip.ALL) {
+      if (this.communicationFilter.selectedChip?.type === EventSelectChip.WITH_EVENT) {
         filtered = onlyEvents
           ? filtered.filter(communication => communication.createdAt)
           : filtered;
@@ -120,7 +129,7 @@ export class SchoolCommunicationListComponent implements OnInit {
           })
           : filtered;
       }
-      if(this.communicationFilter.selectedChip?.type === EventSelectChip.WITHOUT_EVENT) {
+      if (this.communicationFilter.selectedChip?.type === EventSelectChip.WITHOUT_EVENT) {
         filtered = filtered.filter(communication => !communication.createdAt)
       }
     }

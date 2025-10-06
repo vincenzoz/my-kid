@@ -84,6 +84,32 @@ export function createMockClient() {
                         }
                     }
                 },
+                delete: (table) => {
+                    console.log('[MOCK] DELETE school communications');
+                    return {
+                        eq: () => {
+                            return {
+                                select: () => {
+                                    return {
+                                        single: () => {
+                                            return {
+                                                data: {
+                                                    id: 1,
+                                                    createdAt: new Date().getTime(),
+                                                    title: "modified title",
+                                                    description: 'modified description',
+                                                    important: true,
+                                                    read: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
             }
         }
     }
