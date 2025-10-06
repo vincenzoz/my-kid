@@ -8,7 +8,7 @@ import {InputText} from 'primeng/inputtext';
 import {Router, RouterLink} from '@angular/router';
 import {Scroller} from 'primeng/scroller';
 import {ConfirmationService, MenuItem} from 'primeng/api';
-import {Communication, CommunicationFilter, EventFilterChip, EventSelectChip} from '../../../models/school-models';
+import {Communication, CommunicationFilter } from '../../../models/school-models';
 import {SchoolStore} from '../../../store/school/school.store';
 import {Skeleton} from 'primeng/skeleton';
 import {ConfirmDialog} from 'primeng/confirmdialog';
@@ -43,21 +43,7 @@ export class SchoolCommunicationListComponent implements OnInit {
 
   filteredCommunications: Communication[] = [];
 
-  communicationFilter: CommunicationFilter = {selectedChip: {label: 'tutte', type: EventSelectChip.ALL}};
-
-  eventSelectChips: EventFilterChip[] = [
-    {label: 'tutte', type: EventSelectChip.ALL},
-    {label: 'con eventi', type: EventSelectChip.WITH_EVENT},
-    {label: 'senza eventi', type: EventSelectChip.WITHOUT_EVENT}
-  ];
-
-  selectedEventChip: EventFilterChip = this.eventSelectChips.filter(c => c.type === EventSelectChip.ALL)[0];
-
-  selectEventChip(chip: EventFilterChip) {
-    this.communicationFilter.selectedChip = chip;
-    this.selectedEventChip = chip;
-    this.applyFilter();
-  }
+  communicationFilter: CommunicationFilter = {};
 
   constructor(private router: Router, private confirmationService: ConfirmationService, private location: Location) {
     effect(() => {
@@ -105,7 +91,7 @@ export class SchoolCommunicationListComponent implements OnInit {
     const text = this.communicationFilter.text?.toLowerCase();
     const dateFrom = this.communicationFilter?.dateFrom;
     const dateTo = this.communicationFilter?.dateTo;
-    const onlyEvents = this.communicationFilter?.onlyEvents;
+    const important = this.communicationFilter?.important;
 
     let filtered = this.schoolStore.schoolCommunications().data?.communications || [];
     filtered = text
@@ -113,27 +99,29 @@ export class SchoolCommunicationListComponent implements OnInit {
         communication.title?.toLowerCase().includes(text) ||
         communication.description?.toLowerCase().includes(text))
       : filtered;
-    if (this.communicationFilter.selectedChip?.type !== EventSelectChip.ALL) {
-      if (this.communicationFilter.selectedChip?.type === EventSelectChip.WITH_EVENT) {
-        filtered = onlyEvents
-          ? filtered.filter(communication => communication.createdAt)
-          : filtered;
-        filtered = dateFrom
-          ? filtered.filter(communication => {
-            return !communication.createdAt || communication.createdAt >= dateFrom
-          })
-          : filtered;
-        filtered = dateTo
-          ? filtered.filter(communication => {
-            return !communication.createdAt || communication.createdAt <= dateTo;
-          })
-          : filtered;
-      }
-      if (this.communicationFilter.selectedChip?.type === EventSelectChip.WITHOUT_EVENT) {
-        filtered = filtered.filter(communication => !communication.createdAt)
-      }
-    }
+      filtered = dateFrom
+        ? filtered.filter(communication => {
+          return !communication.createdAt || this.normalizeDate(communication.createdAt) >= this.normalizeDate(dateFrom);
+        })
+      : filtered;
+      filtered = dateTo
+        ? filtered.filter(communication => {
+          return !communication.createdAt || this.normalizeDate(communication.createdAt) <= this.normalizeDate(dateTo);
+        })
+      : filtered;
+    filtered = important
+      ? filtered.filter(communication => {
+        return communication.important;
+      })
+      : filtered;
+
+
     this.filteredCommunications = filtered;
+  }
+
+  normalizeDate(date: string | Date) {
+    const dateObject = new Date(date);
+    return new Date(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate());
   }
 
   toDateOnly(dateStr: string): Date {
@@ -149,7 +137,5 @@ export class SchoolCommunicationListComponent implements OnInit {
     const isLoading = this.schoolStore.schoolCommunications().loading;
     return !isLoading;
   }
-
-  protected readonly EventSelectChip = EventSelectChip;
 }
 

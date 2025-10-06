@@ -22,7 +22,7 @@ export type Communication = {
   id: number;
   title: string;
   description: string;
-  createdAt: Date;
+  createdAt: string;
   createdBy: string;
   important: boolean;
   read: boolean;
@@ -31,18 +31,9 @@ export type Communication = {
 export type CommunicationFilter = {
   text?: string;
   onlyEvents?: boolean;
-  selectedChip?: EventFilterChip;
   dateFrom?: Date;
   dateTo?: Date;
+  important?: boolean;
 }
 
-export type EventFilterChip = {
-  label: string,
-  type: EventSelectChip
-}
 
-export enum EventSelectChip {
-  ALL,
-  WITH_EVENT,
-  WITHOUT_EVENT
-}

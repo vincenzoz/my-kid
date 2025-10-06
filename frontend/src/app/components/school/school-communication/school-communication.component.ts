@@ -47,7 +47,6 @@ export class SchoolCommunicationComponent implements OnInit {
       // current communication non set
       // current communication set but id on route different thn current id
       if (!this.schoolStore.currentCommunication() || this.schoolStore.currentCommunication().data?.id !== this.communicationId) {
-        console.log("before calling load");
         this.schoolStore.loadCommunication(this.communicationId);
       }
     }

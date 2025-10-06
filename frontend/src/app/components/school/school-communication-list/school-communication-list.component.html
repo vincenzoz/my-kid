@@ -79,33 +79,28 @@
     <div class="absolute bottom-0 w-full bg-white p-2 pb-6 rounded-t-lg shadow-lg">
       <div class="flex flex-col gap-5 p-3">
         <div class="flex self-end gap-4">
-          <!--          <div class="btn" (click)="applyFilter()">Applica</div>-->
           <div class="btn-outlined" (click)="toggleDisplayFilter()">Chiudi</div>
         </div>
         <div class="flex flex-col gap-5">
+          <div class="flex">
+            <p-chip
+              label="Importante"
+              class="text-sm"
+              [class]="communicationFilter.important ? 'bg-red-200 text-red-400' : 'outline-1 bg-surface-0 text-red-400'"
+              (click)="communicationFilter.important = !communicationFilter.important; applyFilter()"
+            ></p-chip>
+          </div>
           <input [(ngModel)]="communicationFilter.text" pInputText type="text"
                  (ngModelChange)="applyFilter()" placeholder="testo comunicazione"/>
-          <div class=" flex gap-4 items-center text-surface-500">
-
-            <p-chip
-              *ngFor="let filterEventChip of eventSelectChips"
-              [label]="filterEventChip.label"
-              class="text-surface-500"
-              [class]="{'chip-active' : selectedEventChip === filterEventChip}"
-              (click)="selectEventChip(filterEventChip)"
-              label="con eventi"></p-chip>
-          </div>
-          @if (selectedEventChip.type === EventSelectChip.WITH_EVENT) {
-
             <div class="flex gap-4">
               <p-datepicker [(ngModel)]="communicationFilter.dateFrom" (ngModelChange)="applyFilter()"
-                            placeholder="eventi dal" inputId="on_label" showIcon iconDisplay="input"
+                            placeholder="dal" inputId="on_label" showIcon iconDisplay="input"
                             dateFormat="dd.mm.yy"></p-datepicker>
               <p-datepicker [(ngModel)]="communicationFilter.dateTo" (ngModelChange)="applyFilter()"
-                            placeholder="eventi fino al" inputId="on_label" showIcon iconDisplay="input"
+                            placeholder="al" inputId="on_label" showIcon iconDisplay="input"
                             dateFormat="dd.mm.yy"></p-datepicker>
             </div>
-          }
+
         </div>
       </div>
     </div>
