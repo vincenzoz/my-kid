@@ -50,8 +50,10 @@
                       <p-chip class="bg-yellow-200 text-amber-500 text-[10px] p-2 py-1"
                               label="{{item.createdAt | date: 'dd.MM.yyyy'}}"></p-chip>
                       @if(item.important) {
-                        <p-chip class="bg-red-400 text-red-800 text-[10px] p-2 py-1"
-                                label="Importante"></p-chip>
+                        <p-chip
+                          label="Importante"
+                          class="bg-red-200 text-red-400 text-[10px] p-2 py-1"
+                        ></p-chip>
                       }
                   </div>
                 </div>

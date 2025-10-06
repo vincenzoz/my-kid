@@ -6,6 +6,7 @@ export type CommunicationsResponse = {
 export type CreateSchoolCommunication = {
   title: string,
   description: string,
+  important: boolean
   event: boolean,
   eventTitle?: string,
   eventDate?: string,
