@@ -57,7 +57,6 @@ export const SchoolStore = signalStore(
         next: (data) => {
           // const updatedCommunications = [...store.schoolCommunications().data?.communications || [], data];
           const updatedCommunications = [data, ...(store.schoolCommunications().data?.communications || [])];
-          console.table(updatedCommunications);
           patchState(store, {
             schoolCommunications: {data: {communications: updatedCommunications}, loading: false}
           });

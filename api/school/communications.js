@@ -18,12 +18,12 @@ export default async function handler(req, res) {
     if(req.method === "POST") {
         try {
             console.log("[API] POST - /school/communication");
-            const { title, description, event, eventTitle, eventDate } = req.body;
+            const { title, description, important } = req.body;
             if (!title || !description) {
                 return res.status(400).json({ error: 'Missing title or description' })
             }
             const newSchoolCommunication = await postSchoolCommunications({
-                title, description, event, eventTitle, eventDate
+                title, description, important
             });
             return res.status(201).json(buildCommunicationDto(newSchoolCommunication));
         } catch (err) {
