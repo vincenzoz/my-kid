@@ -4,11 +4,12 @@ import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, V
 import {DatePicker} from 'primeng/datepicker';
 import {Textarea} from 'primeng/textarea';
 import {Checkbox} from 'primeng/checkbox';
-import {CreateSchoolCommunication} from '../../../models/school-models';
+import {CreateSchoolCommunication, ModifyCommunication} from '../../../models/school-models';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DatePipe, Location, NgIf} from '@angular/common';
+import {DatePipe, JsonPipe, Location, NgIf} from '@angular/common';
 import {SchoolStore} from '../../../store/school/school.store';
 import {Skeleton} from 'primeng/skeleton';
+import {Chip} from 'primeng/chip';
 
 @Component({
   selector: 'school-communication',
@@ -17,18 +18,19 @@ import {Skeleton} from 'primeng/skeleton';
     FormsModule,
     DatePicker,
     Textarea,
-    Checkbox,
     ReactiveFormsModule,
     NgIf,
     DatePipe,
-    Skeleton
+    Skeleton,
+    Chip,
+    JsonPipe,
   ],
   templateUrl: './school-communication.component.html',
   styleUrl: './school-communication.component.css'
 })
 export class SchoolCommunicationComponent implements OnInit {
 
-  communicationForm: FormGroup;
+  protected communicationForm: FormGroup;
 
   protected schoolStore = inject(SchoolStore);
 
@@ -45,7 +47,6 @@ export class SchoolCommunicationComponent implements OnInit {
       // current communication non set
       // current communication set but id on route different thn current id
       if (!this.schoolStore.currentCommunication() || this.schoolStore.currentCommunication().data?.id !== this.communicationId) {
-        console.log("before calling load");
         this.schoolStore.loadCommunication(this.communicationId);
       }
     }
@@ -68,6 +69,7 @@ export class SchoolCommunicationComponent implements OnInit {
     this.communicationForm = this.fg.group({
       title: new FormControl<string>('', Validators.required),
       description: new FormControl<string>('', Validators.required),
+      important: new FormControl<boolean>(false),
       eventDate: new FormControl<Date | null> (null),
       isEvent: new FormControl<boolean>(false),
       eventTitle: new FormControl<string>('')
@@ -80,25 +82,39 @@ export class SchoolCommunicationComponent implements OnInit {
 
   private router: Router = inject(Router);
 
+  setImportant() {
+    const important = this.communicationForm.get('important')?.value;
+    this.communicationForm.get('important')?.setValue(!important);
+  }
   saveOrModify() {
-    const isEvent = this.communicationForm.get('isEvent')!.value;
-    const createSchoolCommunication: CreateSchoolCommunication = {
-      title: this.communicationForm.get('title')!.value,
-      description: this.communicationForm.get('description')!.value,
-      event: isEvent,
-    }
-    if (isEvent) {
-      createSchoolCommunication.eventTitle = this.communicationForm.get('eventTitle')?.value;
-      const eventDate: Date = this.communicationForm.get('eventDate')?.value;
-      if (eventDate) {
-        const year = eventDate.getFullYear();
-        const month = String(eventDate.getMonth() + 1).padStart(2, '0');
-        const day = String(eventDate.getDate()).padStart(2, '0');
-        createSchoolCommunication.eventDate = `${year}-${month}-${day}`;
+    if (this.mode === 'create') {
+      const isEvent = this.communicationForm.get('isEvent')!.value;
+      const createSchoolCommunication: CreateSchoolCommunication = {
+        title: this.communicationForm.get('title')!.value,
+        description: this.communicationForm.get('description')!.value,
+        important: this.communicationForm.get('important')?.value,
+        event: isEvent,
       }
-    }
+      if (isEvent) {
+        createSchoolCommunication.eventTitle = this.communicationForm.get('eventTitle')?.value;
+        const eventDate: Date = this.communicationForm.get('eventDate')?.value;
+        if (eventDate) {
+          const year = eventDate.getFullYear();
+          const month = String(eventDate.getMonth() + 1).padStart(2, '0');
+          const day = String(eventDate.getDate()).padStart(2, '0');
+          createSchoolCommunication.eventDate = `${year}-${month}-${day}`;
+        }
+      }
+      this.schoolStore.newCommunication(createSchoolCommunication);
 
-    this.schoolStore.newCommunication(createSchoolCommunication);
+    } else if (this.mode === 'edit') {
+      const modifyCommunication: ModifyCommunication = {
+        title: this.communicationForm.get('title')!.value,
+        description: this.communicationForm.get('description')!.value,
+        important: this.communicationForm.get('important')?.value,
+      };
+      this.schoolStore.modifyCommunication(this.communicationId!, modifyCommunication);
+    }
     this.router.navigate(['/school/communications']);
   }
 }

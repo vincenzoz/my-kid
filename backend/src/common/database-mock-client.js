@@ -30,7 +30,6 @@ export function createMockClient() {
                         },
                         order: (column, value) => {
                             const ordered = mockData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                            console.log(ordered)
                             return {
                                 data: ordered
                             }
@@ -46,12 +45,13 @@ export function createMockClient() {
                                     return {
                                         data: {
                                             id: 100,
-                                            createdAt: new Date().getTime(),
+                                            created_at: new Date(),
                                             title: "new title",
                                             description: 'new description',
-                                            event: true,
-                                            eventTitle: 'event title',
-                                            eventDate: '2025-03-01'
+                                            important: true,
+                                            // event: true,
+                                            // eventTitle: 'event title',
+                                            // eventDate: '2025-03-01'
                                         }
                                     }
 
@@ -59,6 +59,56 @@ export function createMockClient() {
                             }
                         }
                     }
+                },update: (table) => {
+                    console.log('[MOCK] INSERT school communications');
+                    return {
+                        eq: () => {
+                            return {
+                                select: () => {
+                                    return {
+                                        single: () => {
+                                            return {
+                                                data: {
+                                                    id: 1,
+                                                    createdAt: new Date().getTime(),
+                                                    title: "modified title",
+                                                    description: 'modified description',
+                                                    important: true,
+                                                    read: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                delete: (table) => {
+                    console.log('[MOCK] DELETE school communications');
+                    return {
+                        eq: () => {
+                            return {
+                                select: () => {
+                                    return {
+                                        single: () => {
+                                            return {
+                                                data: {
+                                                    id: 1,
+                                                    createdAt: new Date().getTime(),
+                                                    title: "modified title",
+                                                    description: 'modified description',
+                                                    important: true,
+                                                    read: true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
         }

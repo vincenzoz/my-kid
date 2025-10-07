@@ -1,4 +1,5 @@
 import {getSchoolCommunications, postSchoolCommunications} from "../../backend/src/services/school.service.js";
+import {buildCommunicationDto} from "../../backend/src/common/model-mapper.js";
 
 export default async function handler(req, res) {
     if(req.method === "GET") {
@@ -6,19 +7,8 @@ export default async function handler(req, res) {
         try {
             const data = await getSchoolCommunications();
             let mappedCommunications = [];
-            mappedCommunications = data.map(communication => {
-                let com;
-                com = {
-                    id: communication.id,
-                    title: communication.title,
-                    description: communication.description,
-                    createdAt: communication.created_at,
-                    createdBy: communication.created_by,
-                    important: communication.important,
-                    read: communication.read
-                }
-                return com;
-            })
+            mappedCommunications =
+                data.map(communication => buildCommunicationDto(communication));
             return res.status(200).json({ communications: mappedCommunications });
         } catch (err) {
             res.status(500).json({ error: err.message });
@@ -28,25 +18,14 @@ export default async function handler(req, res) {
     if(req.method === "POST") {
         try {
             console.log("[API] POST - /school/communication");
-            const { title, description, event, eventTitle, eventDate } = req.body;
+            const { title, description, important } = req.body;
             if (!title || !description) {
                 return res.status(400).json({ error: 'Missing title or description' })
             }
-
             const newSchoolCommunication = await postSchoolCommunications({
-                title, description, event, eventTitle, eventDate
+                title, description, important
             });
-
-            const mappedDto = {
-                id: newSchoolCommunication.id,
-                title: newSchoolCommunication.title,
-                description: newSchoolCommunication.description,
-                createdAt: newSchoolCommunication.created_at,
-                createdBy: newSchoolCommunication.created_by,
-                important: newSchoolCommunication.important,
-                read: newSchoolCommunication.read
-            }
-            return res.status(201).json(mappedDto);
+            return res.status(201).json(buildCommunicationDto(newSchoolCommunication));
         } catch (err) {
             console.error(err)
             return res.status(500).json({ error: 'Server error' })

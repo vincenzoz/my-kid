@@ -8,6 +8,7 @@ import Aura from '@primeng/themes/aura';
 import {provideHttpClient} from '@angular/common/http';
 import {registerLocaleData} from '@angular/common';
 import localeIt from '@angular/common/locales/it';
+import {ConfirmationService} from 'primeng/api';
 
 registerLocaleData(localeIt, 'it');
 
@@ -29,6 +30,8 @@ export const appConfig: ApplicationConfig = {
         }
       }
     }),
+    ConfirmationService
+
     // { provide: LOCALE_ID, useValue: 'it' }
 
   ]

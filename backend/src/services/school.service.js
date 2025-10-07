@@ -11,10 +11,10 @@ export async function getSchoolCommunications() {
     return data;
 }
 
-export async function postSchoolCommunications({title, description, event, eventTitle, eventDate}) {
+export async function postSchoolCommunications({title, description, important}) {
     const { data, error } = await supabase
         .from('school_communications')
-        .insert({ title: title, description: description, event: event, event_title: eventTitle, event_date: eventDate })
+        .insert({ title: title, description: description, important: important })
         .select()
         .single();
     if (error) throw new Error(error.message)
@@ -27,6 +27,30 @@ export async function getSchoolCommunicationById(id) {
         .from('school_communications')
         .select()
         .eq('id', id)
+        .single();
+    if (error) throw new Error(error.message)
+    return data;
+}
+
+export async function modifySchoolCommunicationById(id, { title, description, important }) {
+    console.log('id:' + id, " - title: " + title, " - description: " + description, " - important: " + important);
+    const { data, error } = await supabase
+        .from('school_communications')
+        .update({ title, description, important })
+        .eq('id', id)
+        .select()
+        .single();
+    if (error) throw new Error(error.message)
+    return data;
+}
+
+export async function deleteSchoolCommunicationById(id) {
+    console.log('id:' + id)
+    const { data, error } = await supabase
+        .from('school_communications')
+        .delete()
+        .eq('id', id)
+        .select()
         .single();
     if (error) throw new Error(error.message)
     return data;

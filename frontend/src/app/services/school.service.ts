@@ -2,7 +2,12 @@ import {inject, Injectable} from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import {environment} from '../environments/environment';
 import {Observable} from 'rxjs';
-import {Communication, CommunicationsResponse, CreateSchoolCommunication} from '../models/school-models';
+import {
+  Communication,
+  CommunicationsResponse,
+  CreateSchoolCommunication,
+  ModifyCommunication
+} from '../models/school-models';
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +31,22 @@ export class SchoolService {
     return this.http.post<Communication>(url, createSchoolCommunication)
   }
 
+  modifyCommunication(id: number, communication: ModifyCommunication): Observable<Communication> {
+    console.log("modifyCommunication");
+    console.table(communication);
+    const url = environment.BACKEND_URL + "api/school/communications/" + id;
+    return this.http.put<Communication>(url, communication)
+  }
+
   viewSchoolCommunication(id: number): Observable<Communication> {
     console.log("viewCommunication");
     const url = environment.BACKEND_URL + "api/school/communications/" + id;
     return this.http.get<Communication>(url)
+  }
+
+  deleteCommunication(id: number): Observable<Communication> {
+    console.log("deleteCommunication");
+    const url = environment.BACKEND_URL + "api/school/communications/" + id;
+    return this.http.delete<Communication>(url)
   }
 }
