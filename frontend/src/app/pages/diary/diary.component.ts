@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import {SectionHeaderComponent} from '../../components/section-header/section-header.component';
 
 @Component({
-  selector: 'health',
+  selector: 'diary',
   imports: [
     SectionHeaderComponent
   ],
-  templateUrl: './health.component.html',
-  styleUrl: './health.component.css'
+  templateUrl: './diary.component.html',
+  styleUrl: './diary.component.css'
 })
-export class HealthComponent {
+export class DiaryComponent {
 
 }

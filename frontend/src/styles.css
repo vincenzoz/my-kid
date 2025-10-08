@@ -2,6 +2,8 @@
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
 @plugin "tailwindcss-primeui";
+@config "../tailwind.config.js";
+
 @tailwind utilities;
 
 .create-card {

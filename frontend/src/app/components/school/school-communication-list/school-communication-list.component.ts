@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit, signal, ViewChild} from '@angular/core';
+import {Component, effect, inject, OnInit, output, Output, signal, ViewChild} from '@angular/core';
 import {Chip} from 'primeng/chip';
 import {ContextMenu} from 'primeng/contextmenu';
 import {DatePicker} from 'primeng/datepicker';
@@ -12,6 +12,7 @@ import {Communication, CommunicationFilter } from '../../../models/school-models
 import {SchoolStore} from '../../../store/school/school.store';
 import {Skeleton} from 'primeng/skeleton';
 import {ConfirmDialog} from 'primeng/confirmdialog';
+import {SectionHeaderComponent} from '../../section-header/section-header.component';
 
 @Component({
   selector: 'school-communication-list',
@@ -26,7 +27,8 @@ import {ConfirmDialog} from 'primeng/confirmdialog';
     Scroller,
     NgForOf,
     Skeleton,
-    ConfirmDialog
+    ConfirmDialog,
+    SectionHeaderComponent
   ],
   templateUrl: './school-communication-list.component.html',
   styleUrl: './school-communication-list.component.css'

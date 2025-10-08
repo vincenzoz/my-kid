@@ -8,6 +8,8 @@ import {SchoolCommunicationComponent} from './components/school/school-communica
 import {
   SchoolCommunicationListComponent
 } from './components/school/school-communication-list/school-communication-list.component';
+import { DiaryComponent } from './pages/diary/diary.component';
+import { SportComponent } from './pages/sport/sport.component';
 
 export const routes: Routes = [
   {
@@ -28,6 +30,8 @@ export const routes: Routes = [
   { path: 'school/communications/:id/view', component: SchoolCommunicationComponent, data: {mode: 'view'}},
   { path: 'health', component: HealthComponent},
   { path: 'profile', component: ProfileComponent},
+  { path: 'diary', component: DiaryComponent},
+  { path: 'sport', component: SportComponent},
   {
     path: 'create',
     children: [

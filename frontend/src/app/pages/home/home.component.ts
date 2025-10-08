@@ -1,15 +1,27 @@
-import {Component, signal} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {InputText} from 'primeng/inputtext';
+import {CurrentSection} from '../../models/enums/current-section.enum';
+import {AppStore} from '../../store/app.store';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'home',
   imports: [
-    InputText
+    InputText,
+    RouterLink
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+
+  protected appStore = inject(AppStore);
+
+  protected readonly CurrentSection = CurrentSection;
+
+  navigateToSection(section: CurrentSection) {
+    this.appStore.setCurrentSection(section)
+  }
 
 }
 

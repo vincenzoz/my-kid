@@ -1,34 +1,28 @@
 <div class="flex flex-col gap-1 min-h-screen h-screen bg-surface-50">
-  <div class="flex flex-col bg-red-400 max-h-50 mb-10 border-b-3 border-b-red-800 rounded-b-xs">
-    <div class="flex p-4 pb-1 items-center min-h-15 text-red-800">
-      <i class="pi pi-chevron-left"></i>
-      <span class="ml-2 font-semibol" routerLink="..">Indietro</span>
-    </div>
-    <div class="flex flex-col gap-1.5 items-center">
-      <div class="h-15 items-center justify-items-center text-red-800 mb-0.5">
-        <p class="text-2xl font-semibold">Scuola</p>
-      </div>
-      <div
-        class="flex flex-col justify-center items-center w-30 h-30 rounded-full bg-surface-100 outline-3 outline-red-800">
-        <img class="w-20 h-20 mb-5" src="/icons/school.svg"/>
-      </div>
-    </div>
-  </div>
-
+  <section-header></section-header>
 
   <div class="flex flex-col text-surface-500">
 
-    <div class="flex items-center border-b-1 border-surface-500 p-4">
+    <div class="flex justify-between items-center border-b-[0.5px] border-surface-400 p-4">
+      <div>
+        <i class="pi pi-clipboard mr-2"></i>
+        <span routerLink="communications">Comunicazioni</span>
+      </div>
       <i class="pi pi-chevron-right mr-2"></i>
-      <span routerLink="communications">Comunicazioni</span>
     </div>
-    <div class="flex items-center border-b-1 border-surface-500 p-4">
+    <div class="flex justify-between items-center border-b-[0.5px] border-surface-400 p-4">
+      <div>
+        <i class="pi pi-calendar-clock mr-2"></i>
+        <span>Eventi</span>
+      </div>
       <i class="pi pi-chevron-right mr-2"></i>
-      <span>Eventi</span>
     </div>
-    <div class="flex items-center border-b-1 border-surface-500 p-4">
+    <div class="flex justify-between items-center border-b-[0.5px] border-surface-400 p-4">
+      <div>
+        <i class="pi pi-address-book mr-2"></i>
+        <span>Contatti</span>
+      </div>
       <i class="pi pi-chevron-right mr-2"></i>
-      <span>Contatti</span>
     </div>
   </div>
 

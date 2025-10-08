@@ -1,11 +1,14 @@
 import {patchState, signalStore, withMethods, withState} from '@ngrx/signals';
+import {CurrentSection} from '../models/enums/current-section.enum';
 
 export interface AppState {
   loading: boolean;
+  currentSection: CurrentSection
 }
 
 const initialState: AppState = {
-  loading: false
+  loading: false,
+  currentSection: CurrentSection.NONE
 }
 
 export const AppStore = signalStore(
@@ -13,8 +16,7 @@ export const AppStore = signalStore(
   withState<AppState>(initialState),
 
   withMethods((store) => ({
-    showSpinner(value: boolean) {
-      patchState(store, {loading: value});
-    }
+    showSpinner(value: boolean) { patchState(store, {loading: value}) },
+    setCurrentSection: (section: CurrentSection) => patchState(store, {currentSection: section})
   }))
 );
