@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {InputText} from 'primeng/inputtext';
-import {CurrentSection} from '../../models/enums/current-section.enum';
+import {Section} from '../../models/enums/current-section.enum';
 import {AppStore} from '../../store/app.store';
 import {RouterLink} from '@angular/router';
 
@@ -17,9 +17,9 @@ export class HomeComponent {
 
   protected appStore = inject(AppStore);
 
-  protected readonly CurrentSection = CurrentSection;
+  protected readonly CurrentSection = Section;
 
-  navigateToSection(section: CurrentSection) {
+  navigateToSection(section: Section) {
     this.appStore.setCurrentSection(section)
   }
 

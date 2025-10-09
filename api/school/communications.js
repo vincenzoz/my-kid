@@ -5,7 +5,14 @@ export default async function handler(req, res) {
     if(req.method === "GET") {
         console.log("[API] GET - /school/communication");
         try {
-            const data = await getSchoolCommunications();
+            const type = req.query.type;
+            console.log('type: ' + type);
+
+            if (!type) {
+                return res.status(400).json({error: "Invalid communication type"});
+            }
+
+            const data = await getSchoolCommunications(type);
             let mappedCommunications = [];
             mappedCommunications =
                 data.map(communication => buildCommunicationDto(communication));
@@ -18,12 +25,12 @@ export default async function handler(req, res) {
     if(req.method === "POST") {
         try {
             console.log("[API] POST - /school/communication");
-            const { title, description, important } = req.body;
-            if (!title || !description) {
-                return res.status(400).json({ error: 'Missing title or description' })
+            const { title, description, important, type } = req.body;
+            if (!title || !description || !type) {
+                return res.status(400).json({ error: 'Missing title or description or type' })
             }
             const newSchoolCommunication = await postSchoolCommunications({
-                title, description, important
+                title, description, important, type
             });
             return res.status(201).json(buildCommunicationDto(newSchoolCommunication));
         } catch (err) {

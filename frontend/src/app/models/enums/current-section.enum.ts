@@ -1,7 +1,6 @@
-export enum CurrentSection {
-  NONE,
-  SCHOOL,
-  DIARY,
-  HEALTH,
-  SPORT
+export enum Section {
+  SCHOOL = 'SCHOOL',
+  DIARY = 'DIARY',
+  HEALTH = 'HEALTH',
+  SPORT = 'SPORT',
 }

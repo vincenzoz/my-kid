@@ -4,7 +4,7 @@ export function createMockClient() {
             //TODO change createdBy with the user id when the logic to retrieve users will be implemented
             const mockData = [
                 { id: 1, title: "Soupe a la courge", description: "Il 23 Dicembre la scuola organizza...\n\nPortare giustificazione", type: "SCHOOL", important: true, created_at: '2025-10-01 11:39:04.31597', created_by: "Michael", read: false },
-                { id: 2, title: "Incontro con i maestri", description: null, type: "SCHOOL", important: true, created_at: '2025-10-02 11:39:04.31597', created_by: "Jane", read: false },
+                { id: 2, title: "Incontro con i maestri", description: null, type: "DIARY", important: true, created_at: '2025-10-02 11:39:04.31597', created_by: "Jane", read: false },
                 { id: 3, title: "Comunication Septembre", description: "Ultimo giorno di scuola sarà il 19.12.2025", type: "SCHOOL", important: false, created_at: '2025-10-03 11:39:04.31597', created_by: "Jane", read: true }
             ];
 
@@ -16,6 +16,7 @@ export function createMockClient() {
                         eq: (column, value) => {
                             console.log(`[MOCK] Filter by ${column} = ${value}`);
                             const filtered = mockData.filter(item => item[column] === value);
+                            console.table(filtered); // TODO remove
                             return {
                                 single: () => {
                                     console.log('[MOCK] Return single item');
@@ -24,15 +25,16 @@ export function createMockClient() {
                                         error: null
                                     };
                                 },
+                                order: (column, options = { ascending: true }) => {
+                                    console.log(`[MOCK] Order by ${column} (${options.ascending ? 'asc' : 'desc'})`);
+                                    const ordered = filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                                    return {
+                                        data: ordered
+                                    }
+                                },
                                 data: filtered,
                                 error: null
                             };
-                        },
-                        order: (column, value) => {
-                            const ordered = mockData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                            return {
-                                data: ordered
-                            }
                         }
                     };
                 },

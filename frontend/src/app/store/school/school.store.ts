@@ -5,9 +5,11 @@ import {
   ModifyCommunication
 } from '../../models/school-models';
 import {patchState, signalStore, withMethods, withState} from '@ngrx/signals';
-import {inject} from '@angular/core';
+import {effect, inject} from '@angular/core';
 import {SchoolService} from '../../services/school.service';
 import {AppStore} from '../app.store';
+import {Section} from '../../models/enums/current-section.enum';
+import {withEffects} from '@ngrx/signals/events';
 
 export interface SchoolState {
   schoolCommunications: Request<CommunicationsResponse | undefined>;
@@ -29,15 +31,22 @@ interface Request<T> {
 export const SchoolStore = signalStore(
   {providedIn: 'root'},
   withState<SchoolState>(initialState),
-
+  withEffects((store, appStore = inject(AppStore)) => {
+    effect(() => {
+      // Reset the state when change section. Avoid
+      console.log('Current section changed: ', appStore.currentSection());
+      patchState(store, { ...initialState });
+    });
+    return { };
+  }),
   withMethods((store,
                schoolService = inject(SchoolService),
                appStore = inject(AppStore)) => ({
     initCurrentCommunication: () => patchState(store, {currentCommunication: { data: undefined, loading: false, firstLoad: false }}),
-    loadCommunications() {
+    loadCommunications(type: Section) {
       if(store.schoolCommunications().firstLoad) return;
       patchState(store, {schoolCommunications: {...store.schoolCommunications(), loading: true}});
-      schoolService.schoolCommunications().subscribe({
+      schoolService.schoolCommunications(type).subscribe({
         next: (data) => {
           patchState(store, {
             schoolCommunications: {data: data, loading: false, firstLoad: true}

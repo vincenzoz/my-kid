@@ -1,1 +1,22 @@
-<section-header></section-header>
+<div class="flex flex-col gap-1 min-h-screen h-screen bg-surface-50">
+  <section-header></section-header>
+
+  <div class="flex flex-col text-surface-500">
+
+    <div routerLink="communications" (click)="appStore.setSubSection('Note')" class="flex justify-between items-center border-b-[0.5px] border-surface-400 p-4">
+      <div>
+        <i class="pi pi-clipboard mr-2"></i>
+        <span>Note</span>
+      </div>
+      <i class="pi pi-chevron-right mr-2"></i>
+    </div>
+    <div class="flex justify-between items-center border-b-[0.5px] border-surface-400 p-4">
+      <div>
+        <i class="pi pi-calendar-clock mr-2"></i>
+        <span>Eventi</span>
+      </div>
+      <i class="pi pi-chevron-right mr-2"></i>
+    </div>
+  </div>
+
+</div>

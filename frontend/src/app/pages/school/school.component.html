@@ -3,10 +3,10 @@
 
   <div class="flex flex-col text-surface-500">
 
-    <div class="flex justify-between items-center border-b-[0.5px] border-surface-400 p-4">
+    <div routerLink="communications" (click)="appStore.setSubSection('Comunicazioni')" class="flex justify-between items-center border-b-[0.5px] border-surface-400 p-4">
       <div>
         <i class="pi pi-clipboard mr-2"></i>
-        <span routerLink="communications">Comunicazioni</span>
+        <span>Comunicazioni</span>
       </div>
       <i class="pi pi-chevron-right mr-2"></i>
     </div>

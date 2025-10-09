@@ -28,9 +28,17 @@ export const routes: Routes = [
   { path: 'school/communications/create', component: SchoolCommunicationComponent, data: {mode: 'create'}},
   { path: 'school/communications/:id/edit', component: SchoolCommunicationComponent, data: {mode: 'edit'}},
   { path: 'school/communications/:id/view', component: SchoolCommunicationComponent, data: {mode: 'view'}},
+
+
+  { path: 'diary', component: DiaryComponent},
+  { path: 'diary/communications', component: SchoolCommunicationListComponent},
+  { path: 'diary/communications/create', component: SchoolCommunicationComponent, data: {mode: 'create'}},
+  { path: 'diary/communications/:id/edit', component: SchoolCommunicationComponent, data: {mode: 'edit'}},
+  { path: 'diary/communications/:id/view', component: SchoolCommunicationComponent, data: {mode: 'view'}},
+
+
   { path: 'health', component: HealthComponent},
   { path: 'profile', component: ProfileComponent},
-  { path: 'diary', component: DiaryComponent},
   { path: 'sport', component: SportComponent},
   {
     path: 'create',

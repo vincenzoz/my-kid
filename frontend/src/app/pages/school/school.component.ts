@@ -1,7 +1,8 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
 import {SectionHeaderComponent} from '../../components/section-header/section-header.component';
+import {AppStore} from '../../store/app.store';
 
 @Component({
   selector: 'school',
@@ -15,5 +16,7 @@ import {SectionHeaderComponent} from '../../components/section-header/section-he
   styleUrl: './school.component.css'
 })
 export class SchoolComponent {
+
+  protected appStore = inject(AppStore);
 
 }

@@ -1,18 +1,19 @@
-import {Component, effect, inject, OnInit, output, Output, signal, ViewChild} from '@angular/core';
+import {Component, effect, inject, OnInit, signal, untracked, ViewChild} from '@angular/core';
 import {Chip} from 'primeng/chip';
 import {ContextMenu} from 'primeng/contextmenu';
 import {DatePicker} from 'primeng/datepicker';
-import {DatePipe, Location, NgForOf} from '@angular/common';
+import {DatePipe, Location} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
 import {Router, RouterLink} from '@angular/router';
 import {Scroller} from 'primeng/scroller';
 import {ConfirmationService, MenuItem} from 'primeng/api';
-import {Communication, CommunicationFilter } from '../../../models/school-models';
+import {Communication, CommunicationFilter} from '../../../models/school-models';
 import {SchoolStore} from '../../../store/school/school.store';
 import {Skeleton} from 'primeng/skeleton';
 import {ConfirmDialog} from 'primeng/confirmdialog';
 import {SectionHeaderComponent} from '../../section-header/section-header.component';
+import {AppStore} from '../../../store/app.store';
 
 @Component({
   selector: 'school-communication-list',
@@ -25,7 +26,6 @@ import {SectionHeaderComponent} from '../../section-header/section-header.compon
     InputText,
     RouterLink,
     Scroller,
-    NgForOf,
     Skeleton,
     ConfirmDialog,
     SectionHeaderComponent
@@ -36,6 +36,8 @@ import {SectionHeaderComponent} from '../../section-header/section-header.compon
 export class SchoolCommunicationListComponent implements OnInit {
 
   protected schoolStore = inject(SchoolStore);
+
+  protected appStore = inject(AppStore);
 
   contextMenuItems: MenuItem[] | undefined;
 
@@ -51,15 +53,18 @@ export class SchoolCommunicationListComponent implements OnInit {
     effect(() => {
       this.filteredCommunications = this.schoolStore.schoolCommunications().data?.communications || [];
     });
-    this.schoolStore.loadCommunications();
+
+    effect(() => {
+      const section = this.appStore.currentSection();
+      if (section) {
+        untracked(() => {
+          this.schoolStore.loadCommunications(this.appStore.currentSection()!);
+        })
+      }
+    });
   }
 
   ngOnInit(): void {
-  }
-
-  goBack() {
-    if (this.canNavigate())
-      this.location.back();
   }
 
   openContextMenu($event: MouseEvent, id: number) {
@@ -124,20 +129,6 @@ export class SchoolCommunicationListComponent implements OnInit {
   normalizeDate(date: string | Date) {
     const dateObject = new Date(date);
     return new Date(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate());
-  }
-
-  toDateOnly(dateStr: string): Date {
-    if (dateStr.includes('.')) {
-      const [day, month, year] = dateStr.split('.');
-      return new Date(Number(year), Number(month) - 1, Number(day));
-    }
-    const date = new Date(dateStr);
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  }
-
-  canNavigate() {
-    const isLoading = this.schoolStore.schoolCommunications().loading;
-    return !isLoading;
   }
 }
 

@@ -3,7 +3,7 @@ import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {ProgressSpinner} from 'primeng/progressspinner';
 import {AppStore} from './store/app.store';
 import {filter} from 'rxjs';
-import {CurrentSection} from './models/enums/current-section.enum';
+import {Section} from './models/enums/current-section.enum';
 
 @Component({
   selector: 'app-root',
@@ -40,12 +40,12 @@ export function initRouterWatcher() {
     );
 }
 
-function resolveSection(url: string): CurrentSection {
-  if (url.startsWith('/school')) return CurrentSection.SCHOOL;
-  if (url.startsWith('/health')) return CurrentSection.HEALTH;
-  if (url.startsWith('/diary')) return CurrentSection.DIARY;
-  if (url.startsWith('/sport')) return CurrentSection.SPORT;
-  return CurrentSection.NONE;
+function resolveSection(url: string): Section | undefined{
+  if (url.startsWith('/school')) return Section.SCHOOL;
+  if (url.startsWith('/health')) return Section.HEALTH;
+  if (url.startsWith('/diary')) return Section.DIARY;
+  if (url.startsWith('/sport')) return Section.SPORT;
+  return undefined;
 }
 
 
