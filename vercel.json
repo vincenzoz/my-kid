@@ -8,7 +8,7 @@
       "destination": "/browser/index.html"
     },
     {
-      "source": "/((?!api/).+\\..+)",
+      "source": "/:file((?!api/).+\\..+)",
       "destination": "/browser/:file"
     }
   ],
