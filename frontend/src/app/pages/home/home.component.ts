@@ -1,3 +1,4 @@
+
 import {Component, inject} from '@angular/core';
 import {InputText} from 'primeng/inputtext';
 import {Section} from '../../models/enums/current-section.enum';
@@ -7,7 +8,6 @@ import {RouterLink} from '@angular/router';
 @Component({
   selector: 'home',
   imports: [
-    InputText,
     RouterLink
   ],
   templateUrl: './home.component.html',

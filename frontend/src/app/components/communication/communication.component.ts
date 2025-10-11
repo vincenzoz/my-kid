@@ -4,14 +4,14 @@ import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, V
 import {Textarea} from 'primeng/textarea';
 import {ActivatedRoute} from '@angular/router';
 import {DatePipe} from '@angular/common';
-import {SchoolStore} from '../../../store/school/school.store';
+import {CommunicationStore} from '../../store/communication.store';
 import {Skeleton} from 'primeng/skeleton';
 import {Chip} from 'primeng/chip';
-import {CommunicationHeaderComponent} from '../../communication-header/communication-header.component';
-import {SectionConfigService} from '../../../services/section-config.service';
+import {CommunicationHeaderComponent} from '../communication-header/communication-header.component';
+import {SectionConfigService} from '../../services/section-config.service';
 
 @Component({
-  selector: 'school-communication',
+  selector: 'communication',
   imports: [
     InputText,
     FormsModule,
@@ -22,10 +22,10 @@ import {SectionConfigService} from '../../../services/section-config.service';
     Chip,
     CommunicationHeaderComponent
   ],
-  templateUrl: './school-communication.component.html',
-  styleUrl: './school-communication.component.css'
+  templateUrl: './communication.component.html',
+  styleUrl: './communication.component.css'
 })
-export class SchoolCommunicationComponent implements OnInit {
+export class CommunicationComponent implements OnInit {
 
   private fg: FormBuilder = inject(FormBuilder);
 
@@ -33,7 +33,7 @@ export class SchoolCommunicationComponent implements OnInit {
 
   protected communicationForm: FormGroup;
 
-  protected schoolStore = inject(SchoolStore);
+  protected schoolStore = inject(CommunicationStore);
 
   protected sectionConfig = inject(SectionConfigService);
 

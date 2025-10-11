@@ -8,12 +8,12 @@ import {InputText} from 'primeng/inputtext';
 import {Router, RouterLink} from '@angular/router';
 import {Scroller} from 'primeng/scroller';
 import {ConfirmationService, MenuItem} from 'primeng/api';
-import {Communication, CommunicationFilter} from '../../../models/school-models';
-import {SchoolStore} from '../../../store/school/school.store';
+import {Communication, CommunicationFilter} from '../../models/school-models';
+import {CommunicationStore} from '../../store/communication.store';
 import {Skeleton} from 'primeng/skeleton';
 import {ConfirmDialog} from 'primeng/confirmdialog';
-import {SectionHeaderComponent} from '../../section-header/section-header.component';
-import {AppStore} from '../../../store/app.store';
+import {SectionHeaderComponent} from '../section-header/section-header.component';
+import {AppStore} from '../../store/app.store';
 
 @Component({
   selector: 'school-communication-list',
@@ -30,12 +30,12 @@ import {AppStore} from '../../../store/app.store';
     ConfirmDialog,
     SectionHeaderComponent
   ],
-  templateUrl: './school-communication-list.component.html',
-  styleUrl: './school-communication-list.component.css'
+  templateUrl: './communication-list.component.html',
+  styleUrl: './communication-list.component.css'
 })
-export class SchoolCommunicationListComponent implements OnInit {
+export class CommunicationListComponent implements OnInit {
 
-  protected schoolStore = inject(SchoolStore);
+  protected schoolStore = inject(CommunicationStore);
 
   protected appStore = inject(AppStore);
 
@@ -51,7 +51,7 @@ export class SchoolCommunicationListComponent implements OnInit {
 
   constructor(private router: Router, private confirmationService: ConfirmationService, private location: Location) {
     effect(() => {
-      this.filteredCommunications = this.schoolStore.schoolCommunications().data?.communications || [];
+      this.filteredCommunications = this.schoolStore.communications().data?.communications || [];
     });
 
     effect(() => {
@@ -100,7 +100,7 @@ export class SchoolCommunicationListComponent implements OnInit {
     const dateTo = this.communicationFilter?.dateTo;
     const important = this.communicationFilter?.important;
 
-    let filtered = this.schoolStore.schoolCommunications().data?.communications || [];
+    let filtered = this.schoolStore.communications().data?.communications || [];
     filtered = text
       ? filtered.filter(communication =>
         communication.title?.toLowerCase().includes(text) ||

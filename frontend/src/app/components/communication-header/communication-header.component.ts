@@ -1,7 +1,7 @@
 import {Component, inject, input} from '@angular/core';
 import {NgIf, Location} from "@angular/common";
 import {Skeleton} from "primeng/skeleton";
-import {SchoolStore} from '../../store/school/school.store';
+import {CommunicationStore} from '../../store/communication.store';
 import {FormGroup} from '@angular/forms';
 import {CreateSchoolCommunication, ModifyCommunication} from '../../models/school-models';
 import {Router} from '@angular/router';
@@ -21,7 +21,7 @@ import {SectionConfigService} from '../../services/section-config.service';
 export class CommunicationHeaderComponent {
 
   protected router = inject(Router);
-  protected schoolStore = inject(SchoolStore);
+  protected schoolStore = inject(CommunicationStore);
   protected appStore = inject(AppStore);
 
   mode = input<string>();

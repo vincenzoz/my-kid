@@ -1,7 +1,7 @@
 import {Component, inject, input } from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {NgClass} from '@angular/common';
-import {SchoolStore} from '../../store/school/school.store';
+import {CommunicationStore} from '../../store/communication.store';
 import {SectionConfigService} from '../../services/section-config.service';
 import {AppStore} from '../../store/app.store';
 
@@ -16,7 +16,7 @@ import {AppStore} from '../../store/app.store';
 })
 export class SectionHeaderComponent {
 
-  protected schoolStore = inject(SchoolStore);
+  protected schoolStore = inject(CommunicationStore);
 
   protected appStore = inject(AppStore);
 
@@ -25,7 +25,7 @@ export class SectionHeaderComponent {
   isSubSection = input<boolean>();
 
   canNavigate() {
-    const isLoading = this.schoolStore.schoolCommunications().loading;
+    const isLoading = this.schoolStore.communications().loading;
     return !isLoading;
   }
 }
