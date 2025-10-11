@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import { HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../environments/environment';
 import {Observable} from 'rxjs';
 import {
@@ -8,6 +8,7 @@ import {
   CreateSchoolCommunication,
   ModifyCommunication
 } from '../models/school-models';
+import {Section} from '../models/enums/current-section.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +20,11 @@ export class SchoolService {
   constructor() {
   }
 
-  schoolCommunications(): Observable<CommunicationsResponse> {
+  schoolCommunications(type: Section): Observable<CommunicationsResponse> {
     const url = environment.BACKEND_URL + "api/school/communications";
-    return this.http.get<CommunicationsResponse>(url)
+    const params = new HttpParams()
+      .set('type', type);
+    return this.http.get<CommunicationsResponse>(url, { params })
   }
 
   createSchoolCommunication(createSchoolCommunication: CreateSchoolCommunication): Observable<Communication> {

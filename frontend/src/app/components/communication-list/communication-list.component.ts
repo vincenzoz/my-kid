@@ -1,17 +1,19 @@
-import {Component, effect, inject, OnInit, signal, ViewChild} from '@angular/core';
+import {Component, effect, inject, OnInit, signal, untracked, ViewChild} from '@angular/core';
 import {Chip} from 'primeng/chip';
 import {ContextMenu} from 'primeng/contextmenu';
 import {DatePicker} from 'primeng/datepicker';
-import {DatePipe, Location, NgForOf} from '@angular/common';
+import {DatePipe, Location} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
 import {Router, RouterLink} from '@angular/router';
 import {Scroller} from 'primeng/scroller';
 import {ConfirmationService, MenuItem} from 'primeng/api';
-import {Communication, CommunicationFilter } from '../../../models/school-models';
-import {SchoolStore} from '../../../store/school/school.store';
+import {Communication, CommunicationFilter} from '../../models/school-models';
+import {CommunicationStore} from '../../store/communication.store';
 import {Skeleton} from 'primeng/skeleton';
 import {ConfirmDialog} from 'primeng/confirmdialog';
+import {SectionHeaderComponent} from '../section-header/section-header.component';
+import {AppStore} from '../../store/app.store';
 
 @Component({
   selector: 'school-communication-list',
@@ -24,16 +26,18 @@ import {ConfirmDialog} from 'primeng/confirmdialog';
     InputText,
     RouterLink,
     Scroller,
-    NgForOf,
     Skeleton,
-    ConfirmDialog
+    ConfirmDialog,
+    SectionHeaderComponent
   ],
-  templateUrl: './school-communication-list.component.html',
-  styleUrl: './school-communication-list.component.css'
+  templateUrl: './communication-list.component.html',
+  styleUrl: './communication-list.component.css'
 })
-export class SchoolCommunicationListComponent implements OnInit {
+export class CommunicationListComponent implements OnInit {
 
-  protected schoolStore = inject(SchoolStore);
+  protected schoolStore = inject(CommunicationStore);
+
+  protected appStore = inject(AppStore);
 
   contextMenuItems: MenuItem[] | undefined;
 
@@ -47,17 +51,20 @@ export class SchoolCommunicationListComponent implements OnInit {
 
   constructor(private router: Router, private confirmationService: ConfirmationService, private location: Location) {
     effect(() => {
-      this.filteredCommunications = this.schoolStore.schoolCommunications().data?.communications || [];
+      this.filteredCommunications = this.schoolStore.communications().data?.communications || [];
     });
-    this.schoolStore.loadCommunications();
+
+    effect(() => {
+      const section = this.appStore.currentSection();
+      if (section) {
+        untracked(() => {
+          this.schoolStore.loadCommunications(this.appStore.currentSection()!);
+        })
+      }
+    });
   }
 
   ngOnInit(): void {
-  }
-
-  goBack() {
-    if (this.canNavigate())
-      this.location.back();
   }
 
   openContextMenu($event: MouseEvent, id: number) {
@@ -93,7 +100,7 @@ export class SchoolCommunicationListComponent implements OnInit {
     const dateTo = this.communicationFilter?.dateTo;
     const important = this.communicationFilter?.important;
 
-    let filtered = this.schoolStore.schoolCommunications().data?.communications || [];
+    let filtered = this.schoolStore.communications().data?.communications || [];
     filtered = text
       ? filtered.filter(communication =>
         communication.title?.toLowerCase().includes(text) ||
@@ -122,20 +129,6 @@ export class SchoolCommunicationListComponent implements OnInit {
   normalizeDate(date: string | Date) {
     const dateObject = new Date(date);
     return new Date(dateObject.getFullYear(), dateObject.getMonth(), dateObject.getDate());
-  }
-
-  toDateOnly(dateStr: string): Date {
-    if (dateStr.includes('.')) {
-      const [day, month, year] = dateStr.split('.');
-      return new Date(Number(year), Number(month) - 1, Number(day));
-    }
-    const date = new Date(dateStr);
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  }
-
-  canNavigate() {
-    const isLoading = this.schoolStore.schoolCommunications().loading;
-    return !isLoading;
   }
 }
 

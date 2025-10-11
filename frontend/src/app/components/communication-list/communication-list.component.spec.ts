@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SchoolCommunicationListComponent } from './school-communication-list.component';
+import { CommunicationListComponent } from './communication-list.component';
 
 describe('SchoolCommunicationListComponent', () => {
-  let component: SchoolCommunicationListComponent;
-  let fixture: ComponentFixture<SchoolCommunicationListComponent>;
+  let component: CommunicationListComponent;
+  let fixture: ComponentFixture<CommunicationListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SchoolCommunicationListComponent]
+      imports: [CommunicationListComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SchoolCommunicationListComponent);
+    fixture = TestBed.createComponent(CommunicationListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

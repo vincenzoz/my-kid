@@ -1,19 +1,20 @@
-<div class="flex flex-col">
-  <input class="m-15" pInputText type="text" pSize="small" placeholder="search"/>
+
+<div class="mt-50 flex justify-around mx-8">
+  <div class="border-1 border-b-4 border-l-4 shadow-md border-school rounded-2xl" routerLink="school" (click)="navigateToSection(CurrentSection.SCHOOL)">
+    <img class="w-12 m-2" src="/icons/school.svg"/>
+  </div>
+  <div class="border-1 border-b-4 border-l-4 shadow-md border-diary rounded-2xl" routerLink="diary" (click)="navigateToSection(CurrentSection.DIARY)">
+    <img class="w-12 m-2" src="/icons/diary.svg"/>
+  </div>
+  <div class="border-1 border-b-4 border-l-4 shadow-md border-health rounded-2xl" routerLink="health" (click)="navigateToSection(CurrentSection.HEALTH)">
+    <img class="w-12 m-2" src="/icons/health.svg"/>
+  </div>
+  <div class="border-1 border-b-4 border-l-4 shadow-md border-sport rounded-2xl" routerLink="sport" (click)="navigateToSection(CurrentSection.SPORT)">
+    <img class="w-12 m-2" src="/icons/sport.svg"/>
+  </div>
+
 </div>
 
-<div class="flex flex-col gap-0">
-  <div class="flex justify-between m-2 border-dotted rounded-lg p-2 bg-amber-50 text-amber-400">
-    <div>Organizzare gita scolastica con insegnanti</div>
-    <div>03 Sep.</div>
-  </div>
-  <div class="flex justify-between m-2 border-dotted rounded-lg p-2 bg-amber-100 text-amber-400">
-    <div>Firmare il cahier des communications</div>
-    <div>05 Sep.</div>
-  </div>
-</div>
-
-Test
 
 
 

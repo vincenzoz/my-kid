@@ -1,21 +1,6 @@
 <div class="flex flex-col gap-1 min-h-screen h-screen bg-surface-50">
-  <div class="flex flex-col bg-red-400 max-h-50 mb-10 border-b-3 border-b-red-800 rounded-b-xs">
-    <div class="flex p-4 pb-1 items-center min-h-15 text-red-800">
-      <i class="pi pi-chevron-left"></i>
-      <span class="ml-2 font-semibol" (click)="goBack()">Indietro</span>
-      <div class="ml-auto btn" [routerLink]="canNavigate() ? '../communications/create' : null">Nuova</div>
-    </div>
-    <div class="flex flex-col gap-1.5 items-center">
-      <div class="h-15 items-center justify-items-center text-red-800 mb-0.5">
-        <p class="text-2xl font-semibold">Scuola</p>
-        <p>Comunicazioni</p>
-      </div>
-      <div
-        class="flex flex-col justify-center items-center w-30 h-30 rounded-full bg-surface-100 outline-3 outline-red-800">
-        <img class="w-20 h-20 mb-5" src="/icons/school.svg"/>
-      </div>
-    </div>
-  </div>
+
+  <section-header [isSubSection]="true" subSection="Comunicazioni"></section-header>
 
   <div class="flex-1 flex flex-col overflow-hidden relative">
     <div class="flex items-center pr-5 text-sm text-surface-700 self-end" (click)="toggleDisplayFilter()">
@@ -25,7 +10,7 @@
     <div class="flex flex-col h-screen -mt-1 p-1">
       <div class="flex-1">
 
-        @if (schoolStore.schoolCommunications().loading) {
+        @if (schoolStore.communications().loading) {
           <div class="flex flex-col gap-4 p-4 h-screen ">
             <p-skeleton height="50px" class="w-full"/>
             <p-skeleton height="50px" class="w-full"/>
